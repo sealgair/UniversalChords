@@ -411,6 +411,7 @@
 				E807DB971AE73F3F002ED8A3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E807DB981AE73F3F002ED8A3 /* Build configuration list for PBXNativeTarget "UniversalChordsTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +420,7 @@
 				E807DB9A1AE73F3F002ED8A3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
