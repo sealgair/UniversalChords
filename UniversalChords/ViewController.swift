@@ -47,6 +47,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     ]
     
     let padding: CGFloat = 40
+    let circleSize = 100
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +64,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chord.inputAccessoryView = chordPickerAccessory
         chord.font = chord.font.fontWithSize(24)
         chord.textAlignment = .Center
-        chordPicker.selectRow(4, inComponent: 0, animated: false)
+        chordPicker.selectRow(notes.count * circleSize + 4, inComponent: 0, animated: false)
         self.chooseChord()
         view.addSubview(chord)
         chordPickerAccessory.sizeToFit()
@@ -97,8 +98,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func chooseChord() {
-        let note = notes[chordPicker.selectedRowInComponent(0)]
-        let quality = qualities[chordPicker.selectedRowInComponent(1)]
+        let note = pickerView(chordPicker, titleForRow: chordPicker.selectedRowInComponent(0), forComponent: 0)
+        let quality = pickerView(chordPicker, titleForRow: chordPicker.selectedRowInComponent(1), forComponent: 1)
         chord.text = "\(note) \(quality)"
         chord.resignFirstResponder()
     }
@@ -126,13 +127,25 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return choices(pickerView)[component].count
+        var rows = choices(pickerView)[component].count
+        if pickerView == chordPicker && component == 0 {
+            rows *= 2 * circleSize
+        }
+        return rows
     }
     
     // Mark: UIPickerViewDelegate
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-        return choices(pickerView)[component][row]
+        let componentChoices = choices(pickerView)[component]
+        return componentChoices[row % componentChoices.count]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == chordPicker && component == 0 {
+            let componentChoices = choices(pickerView)[component]
+            pickerView.selectRow(row % componentChoices.count + circleSize * componentChoices.count, inComponent: component, animated: false)
+        }
     }
 }
 
