@@ -13,6 +13,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let chord = UITextField()
     let chordPicker = UIPickerView()
     
+    let instrument = UITextField()
+    let instrumentPicker = UIPickerView()
+    
     let notes = [
         "A♭",
         "A",
@@ -34,6 +37,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         "7th",
         "Minor 7th",
         "Diminished",
+    ]
+    
+    let instruments = [
+        "Banjo",
+        "Guitar",
+        "Mandolin",
+        "Ukulele",
     ]
     
     let padding: CGFloat = 40
@@ -58,10 +68,31 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         view.addSubview(chord)
         chordPickerAccessory.sizeToFit()
         
+        instrumentPicker.delegate = self
+        instrumentPicker.dataSource = self
+        let instrumentPickerAccessory = UIToolbar()
+        instrumentPickerAccessory.setItems([
+            UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "Pick", style: .Done, target: self, action: "chooseInstrument")
+        ], animated: false)
+        
+        instrument.inputView = instrumentPicker
+        instrument.inputAccessoryView = instrumentPickerAccessory
+        instrument.font = instrument.font.fontWithSize(18)
+        instrument.textAlignment = .Center
+        instrumentPicker.selectRow(1, inComponent: 0, animated: false)
+        self.chooseInstrument()
+        view.addSubview(instrument)
+        instrumentPickerAccessory.sizeToFit()
+        
         chord.setTranslatesAutoresizingMaskIntoConstraints(false)
+        instrument.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraints([
             NSLayoutConstraint(item: chord, attribute: .Top,   relatedBy: .Equal, toItem: view, attribute: .Top,   multiplier: 1.0, constant: padding),
-            NSLayoutConstraint(item: chord, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1.0, constant: padding),
+            NSLayoutConstraint(item: chord, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1.0, constant: 0.0),
+            
+            NSLayoutConstraint(item: instrument, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -padding),
+            NSLayoutConstraint(item: instrument, attribute: .Width,  relatedBy: .Equal, toItem: view, attribute: .Width,  multiplier: 1.0, constant: 0.0),
         ])
     }
     
@@ -72,10 +103,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chord.resignFirstResponder()
     }
     
+    func chooseInstrument() {
+        instrument.text = instruments[instrumentPicker.selectedRowInComponent(0)]
+        instrument.resignFirstResponder()
+    }
+    
     func choices(picker:UIPickerView) -> [[String]] {
         switch picker {
         case chordPicker:
             return [notes, qualities]
+        case instrumentPicker:
+            return [instruments]
         default:
             return [[]]
         }
