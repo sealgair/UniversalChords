@@ -14,6 +14,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let chord = UITextField()
     let chordPicker = UIPickerView()
     
+    let diagram = UILabel()
+    
     let instrument = UITextField()
     let instrumentPicker = UIPickerView()
     
@@ -28,12 +30,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    let qualities = [
-        "Major",
-        "Minor",
-        "7th",
-        "Minor 7th",
-        "Diminished",
+    let qualities: [ChordQuality] = [
+        .Major,
+        .Minor,
+        .DominantSeventh,
+        .Augmented,
+        .Diminished,
+        .MinorSeventh,
     ]
     
     let instruments = [
@@ -66,6 +69,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         view.addSubview(chord)
         chordPickerAccessory.sizeToFit()
         
+        diagram.font = diagram.font.fontWithSize(28)
+        diagram.textAlignment = .Center
+        view.addSubview(diagram)
+        updateDiagram()
+        
         instrumentPicker.delegate = self
         instrumentPicker.dataSource = self
         let instrumentPickerAccessory = UIToolbar()
@@ -84,10 +92,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentPickerAccessory.sizeToFit()
         
         chord.setTranslatesAutoresizingMaskIntoConstraints(false)
+        diagram.setTranslatesAutoresizingMaskIntoConstraints(false)
         instrument.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraints([
             NSLayoutConstraint(item: chord, attribute: .Top,   relatedBy: .Equal, toItem: view, attribute: .Top,   multiplier: 1.0, constant: padding),
             NSLayoutConstraint(item: chord, attribute: .Width, relatedBy: .Equal, toItem: view, attribute: .Width, multiplier: 1.0, constant: 0.0),
+            
+            NSLayoutConstraint(item: diagram, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: diagram, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
             
             NSLayoutConstraint(item: instrument, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -padding),
             NSLayoutConstraint(item: instrument, attribute: .Width,  relatedBy: .Equal, toItem: view, attribute: .Width,  multiplier: 1.0, constant: 0.0),
@@ -99,6 +111,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let quality = pickerView(chordPicker, titleForRow: chordPicker.selectedRowInComponent(1), forComponent: 1)
         chord.text = "\(note) \(quality)"
         chord.resignFirstResponder()
+        updateDiagram()
     }
     
     func chooseInstrument() {
@@ -109,12 +122,31 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func choices(picker:UIPickerView) -> [[String]] {
         switch picker {
         case chordPicker:
-            return [chromaNames, qualities]
+            return [chromaNames, qualities.map {q in q.symbol}]
         case instrumentPicker:
             return [instruments]
         default:
             return [[]]
         }
+    }
+    
+    func updateDiagram() {
+        let chromaIndex = chordPicker.selectedRowInComponent(0)
+        let chroma = chromae[chromaIndex % chromae.count]
+        let qualityIndex = chordPicker.selectedRowInComponent(1)
+        let quality = qualities[qualityIndex % qualities.count]
+        let chord = Harmony.create(quality.intervals)
+        let notes = chord(Pitch(chroma: chroma, octave: 1))
+        
+        var notesText = ""
+        for note in notes {
+            if let chroma = note.chroma {
+                notesText += " " + chroma.description
+            } else {
+                notesText += " ?"
+            }
+        }
+        diagram.text = notesText
     }
     
     // Mark: UIPickerViewDataSource
