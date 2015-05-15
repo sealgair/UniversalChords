@@ -16,20 +16,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let instrument = UITextField()
     let instrumentPicker = UIPickerView()
     
-    let notes = [
-        "A♭",
-        "A",
-        "B♭",
-        "B",
-        "C",
-        "D♭",
-        "D",
-        "E♭",
-        "E",
-        "F",
-        "G♭",
-        "G",
-    ]
+    var chromae: [Chroma] {
+        return (0...11).map { i in
+            Chroma(rawValue: i)!
+        }
+    }
     
     let qualities = [
         "Major",
