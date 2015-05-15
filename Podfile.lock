@@ -1,0 +1,19 @@
+PODS:
+  - MusicKit (0.1.0)
+
+DEPENDENCIES:
+  - MusicKit (from `https://github.com/sealgair/MusicKit.git`)
+
+EXTERNAL SOURCES:
+  MusicKit:
+    :git: https://github.com/sealgair/MusicKit.git
+
+CHECKOUT OPTIONS:
+  MusicKit:
+    :commit: 9caad6f958381398a8f941f5ec979ee8b1f092f8
+    :git: https://github.com/sealgair/MusicKit.git
+
+SPEC CHECKSUMS:
+  MusicKit: 1050ec274df6cb61af81c53659ae4cd27054cc9c
+
+COCOAPODS: 0.37.1

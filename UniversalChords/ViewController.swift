@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MusicKit
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -19,6 +20,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var chromae: [Chroma] {
         return (0...11).map { i in
             Chroma(rawValue: i)!
+        }
+    }
+    var chromaNames: [String] {
+        return chromae.map { chroma in
+            chroma.description
         }
     }
     
@@ -55,7 +61,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chord.inputAccessoryView = chordPickerAccessory
         chord.font = chord.font.fontWithSize(24)
         chord.textAlignment = .Center
-        chordPicker.selectRow(notes.count * circleSize + 4, inComponent: 0, animated: false)
+        chordPicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
         self.chooseChord()
         view.addSubview(chord)
         chordPickerAccessory.sizeToFit()
@@ -103,7 +109,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func choices(picker:UIPickerView) -> [[String]] {
         switch picker {
         case chordPicker:
-            return [notes, qualities]
+            return [chromaNames, qualities]
         case instrumentPicker:
             return [instruments]
         default:

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EB53A606-88B2-4E2B-B2D2-BD6F2719834B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>UniversalChords</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1F5E1E6DB8D1BAB331E8A714189665A21105A543</key>
+		<string>https://github.com/sealgair/UniversalChords.git</string>
+		<key>667D2F63578BE4AC3769E6FFF1AE876A7A50DE72</key>
+		<string>https://github.com/benzguo/MusicKit.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>UniversalChords.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1F5E1E6DB8D1BAB331E8A714189665A21105A543</key>
+		<string>..</string>
+		<key>667D2F63578BE4AC3769E6FFF1AE876A7A50DE72</key>
+		<string>../../MusicKit</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/sealgair/UniversalChords.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1F5E1E6DB8D1BAB331E8A714189665A21105A543</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>667D2F63578BE4AC3769E6FFF1AE876A7A50DE72</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MusicKit</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1F5E1E6DB8D1BAB331E8A714189665A21105A543</string>
+			<key>IDESourceControlWCCName</key>
+			<string>UniversalChords</string>
+		</dict>
+	</array>
+</dict>
+</plist>
