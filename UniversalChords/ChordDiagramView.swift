@@ -51,9 +51,9 @@ class ChordDiagramView: UIView {
             NSLayoutConstraint(item: nut, attribute: .Right,  relatedBy: .Equal, toItem: fretBoard, attribute: .Right,  multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: nut, attribute: .Height, relatedBy: .Equal, toItem: nil,       attribute: .Height, multiplier: 1.0, constant: 5.0),
             
-            NSLayoutConstraint(item: fretBoard, attribute: .Left,   relatedBy: .Equal, toItem: self, attribute: .Left,   multiplier: 1.0, constant: 30.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Left,   relatedBy: .Equal, toItem: self, attribute: .Left,   multiplier: 1.0, constant: 50.0),
             NSLayoutConstraint(item: fretBoard, attribute: .Top,    relatedBy: .Equal, toItem: self, attribute: .Top,    multiplier: 1.0, constant: 50.0),
-            NSLayoutConstraint(item: fretBoard, attribute: .Right,  relatedBy: .Equal, toItem: self, attribute: .Right,  multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Right,  relatedBy: .Equal, toItem: self, attribute: .Right,  multiplier: 1.0, constant: -20.0),
             NSLayoutConstraint(item: fretBoard, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
         ])
         
@@ -68,11 +68,11 @@ class ChordDiagramView: UIView {
             fretView.setTranslatesAutoresizingMaskIntoConstraints(false)
             
             fretBoard.addConstraints([
-                NSLayoutConstraint(item: fretLabel, attribute: .Right,   relatedBy: .Equal, toItem: fretBoard, attribute: .Left,   multiplier: 1.0,    constant: 0.0),
+                NSLayoutConstraint(item: fretLabel, attribute: .Right,   relatedBy: .Equal, toItem: fretBoard, attribute: .Left,   multiplier: 1.0,    constant: -30.0),
                 NSLayoutConstraint(item: fretLabel, attribute: .CenterY, relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom, multiplier: offset, constant: 0.0),
                 
                 NSLayoutConstraint(item: fretView, attribute: .CenterY, relatedBy: .Equal, toItem: fretLabel, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: fretView, attribute: .Left,    relatedBy: .Equal, toItem: fretLabel, attribute: .Right,   multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: fretView, attribute: .Left,    relatedBy: .Equal, toItem: fretBoard, attribute: .Left,    multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: fretView, attribute: .Right,   relatedBy: .Equal, toItem: fretBoard, attribute: .Right,   multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: fretView, attribute: .Height,  relatedBy: .Equal, toItem: nil,       attribute: .Height,  multiplier: 1.0, constant: 2.0),
             ])
@@ -107,9 +107,15 @@ class ChordDiagramView: UIView {
             stringContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
             fretBoard.addSubview(stringContainer)
             
-            let offset = CGFloat(i + 1) / CGFloat(instrument.strings.count + 1)
+            let offset = CGFloat(i) / CGFloat(instrument.strings.count - 1)
+            let offsetConstraint: NSLayoutConstraint!
+            if offset == 0 {
+                offsetConstraint = NSLayoutConstraint(item: stringContainer, attribute: .Left, relatedBy: .Equal, toItem: fretBoard, attribute: .Left, multiplier: 1.0, constant: 0.0)
+            } else {
+                offsetConstraint = NSLayoutConstraint(item: stringContainer, attribute: .CenterX, relatedBy: .Equal, toItem: fretBoard, attribute: .Right, multiplier: offset, constant: 0.0)
+            }
             stringConstraints = [
-                NSLayoutConstraint(item: stringContainer, attribute: .CenterX, relatedBy: .Equal, toItem: fretBoard, attribute: .Right,  multiplier: offset, constant: 0.0),
+                offsetConstraint,
                 NSLayoutConstraint(item: stringContainer, attribute: .Top,     relatedBy: .Equal, toItem: fretBoard, attribute: .Top,    multiplier: 1.0,    constant: 0.0),
                 NSLayoutConstraint(item: stringContainer, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom, multiplier: 1.0,    constant: 0.0),
                 
