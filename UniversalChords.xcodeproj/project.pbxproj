@@ -14,6 +14,8 @@
 		E807DB831AE73F3F002ED8A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E807DB821AE73F3F002ED8A3 /* Images.xcassets */; };
 		E807DB861AE73F3F002ED8A3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */; };
 		E807DB921AE73F3F002ED8A3 /* UniversalChordsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DB911AE73F3F002ED8A3 /* UniversalChordsTests.swift */; };
+		E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B51B07E30C0027C77F /* ChordDiagramView.swift */; };
+		E83863B81B07E3800027C77F /* Instrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B71B07E3800027C77F /* Instrument.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,8 @@
 		E807DB8B1AE73F3F002ED8A3 /* UniversalChordsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UniversalChordsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E807DB901AE73F3F002ED8A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E807DB911AE73F3F002ED8A3 /* UniversalChordsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalChordsTests.swift; sourceTree = "<group>"; };
+		E83863B51B07E30C0027C77F /* ChordDiagramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChordDiagramView.swift; sourceTree = "<group>"; };
+		E83863B71B07E3800027C77F /* Instrument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instrument.swift; sourceTree = "<group>"; };
 		FC280B0BE88A85D93B644D9F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +98,8 @@
 			children = (
 				E807DB7B1AE73F3F002ED8A3 /* AppDelegate.swift */,
 				E807DB7D1AE73F3F002ED8A3 /* ViewController.swift */,
+				E83863B51B07E30C0027C77F /* ChordDiagramView.swift */,
+				E83863B71B07E3800027C77F /* Instrument.swift */,
 				E807DB7F1AE73F3F002ED8A3 /* Main.storyboard */,
 				E807DB821AE73F3F002ED8A3 /* Images.xcassets */,
 				E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */,
@@ -287,6 +293,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E83863B81B07E3800027C77F /* Instrument.swift in Sources */,
+				E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */,
 				E807DB7E1AE73F3F002ED8A3 /* ViewController.swift in Sources */,
 				E807DB7C1AE73F3F002ED8A3 /* AppDelegate.swift in Sources */,
 			);
