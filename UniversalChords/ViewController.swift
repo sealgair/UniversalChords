@@ -64,7 +64,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         chordLabel.inputView = chordPicker
         chordLabel.inputAccessoryView = chordPickerAccessory
-        chordLabel.font = chordLabel.font.fontWithSize(24)
+        chordLabel.font = chordLabel.font.fontWithSize(28)
         chordLabel.textAlignment = .Center
         chordPicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
         self.chooseChord()
@@ -147,7 +147,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func updateDiagram() {
         diagram.instrument = self.instrument
-        diagram.chord = self.chord
+        diagram.fingers = [0, 1, 2, 3, 4, 5, 6 ,7, 8]
         diagram.updateDiagram()
         
         let chromaIndex = chordPicker.selectedRowInComponent(0)

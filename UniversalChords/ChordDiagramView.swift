@@ -11,16 +11,8 @@ import MusicKit
 
 class ChordDiagramView: UIView {
     
-    var instrument: Instrument! {
-        didSet {
-            updateDiagram()
-        }
-    }
-    var chord: PitchSet! {
-        didSet {
-            updateDiagram()
-        }
-    }
+    var instrument: Instrument!
+    var fingers: [Int]!
     let fretBoard = UIView()
     let fretLabels = (0...4).map {i -> UILabel in
         let label = UILabel()
@@ -60,7 +52,7 @@ class ChordDiagramView: UIView {
         for (i, fretLabel) in enumerate(fretLabels) {
             fretBoard.addSubview(fretLabel)
             fretLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-            let offset = CGFloat(i + 1) / CGFloat(fretLabels.count + 1)
+            let offset = CGFloat(i + 1) / CGFloat(fretLabels.count)
             
             let fretView = UIView()
             fretView.backgroundColor = UIColor.blackColor()
@@ -85,7 +77,7 @@ class ChordDiagramView: UIView {
         stringViews.map {v in v.removeFromSuperview()}
         stringViews = []
         
-        if instrument == nil || chord == nil {
+        if instrument == nil || fingers == nil {
             return
         }
         
@@ -95,7 +87,7 @@ class ChordDiagramView: UIView {
             
             let stringLabel = UILabel()
             stringLabel.text = string.description
-            stringLabel.font = stringLabel.font.fontWithSize(28)
+            stringLabel.font = stringLabel.font.fontWithSize(22)
             stringLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
             stringContainer.addSubview(stringLabel)
             
@@ -107,6 +99,19 @@ class ChordDiagramView: UIView {
             stringContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
             fretBoard.addSubview(stringContainer)
             
+            let fingerRadius: CGFloat = 20.0;
+            let fingerIndex = fingers[i]
+            let finger = UILabel()
+            finger.text = String(fingerIndex)
+            finger.backgroundColor = UIColor.blackColor()
+            finger.textColor = UIColor.whiteColor()
+            finger.textAlignment = .Center
+            finger.font = UIFont.boldSystemFontOfSize(16)
+            finger.layer.cornerRadius = fingerRadius
+            finger.layer.masksToBounds = true
+            finger.setTranslatesAutoresizingMaskIntoConstraints(false)
+            stringContainer.addSubview(finger)
+            
             let offset = CGFloat(i) / CGFloat(instrument.strings.count - 1)
             let offsetConstraint: NSLayoutConstraint!
             if offset == 0 {
@@ -114,18 +119,29 @@ class ChordDiagramView: UIView {
             } else {
                 offsetConstraint = NSLayoutConstraint(item: stringContainer, attribute: .CenterX, relatedBy: .Equal, toItem: fretBoard, attribute: .Right, multiplier: offset, constant: 0.0)
             }
+            let fingerOffsetConstraint: NSLayoutConstraint!
+            if fingerIndex == 0 {
+                fingerOffsetConstraint = NSLayoutConstraint(item: finger, attribute: .CenterY, relatedBy: .Equal, toItem: stringView, attribute: .Top, multiplier: 1.0, constant: 0.0)
+            } else {
+                fingerOffsetConstraint = NSLayoutConstraint(item: finger, attribute: .CenterY, relatedBy: .Equal, toItem: stringView, attribute: .Bottom, multiplier: CGFloat(fingerIndex) / 5.0, constant: 0.0)
+            }
             stringConstraints = [
                 offsetConstraint,
-                NSLayoutConstraint(item: stringContainer, attribute: .Top,     relatedBy: .Equal, toItem: fretBoard, attribute: .Top,    multiplier: 1.0,    constant: 0.0),
-                NSLayoutConstraint(item: stringContainer, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom, multiplier: 1.0,    constant: 0.0),
+                NSLayoutConstraint(item: stringContainer, attribute: .Top,    relatedBy: .Equal, toItem: fretBoard, attribute: .Top,    multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: stringContainer, attribute: .Bottom, relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
                 
-                NSLayoutConstraint(item: stringLabel, attribute: .Bottom,  relatedBy: .Equal, toItem: stringContainer, attribute: .Top,     multiplier: 1.0, constant: -5.0),
+                NSLayoutConstraint(item: stringLabel, attribute: .Bottom,  relatedBy: .Equal, toItem: stringContainer, attribute: .Top,     multiplier: 1.0, constant: -fingerRadius - 5.0),
                 NSLayoutConstraint(item: stringLabel, attribute: .CenterX, relatedBy: .Equal, toItem: stringContainer, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                 
                 NSLayoutConstraint(item: stringView, attribute: .Top,     relatedBy: .Equal, toItem: stringContainer, attribute: .Top,     multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: stringView, attribute: .Bottom,  relatedBy: .Equal, toItem: stringContainer, attribute: .Bottom,  multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: stringView, attribute: .Width,   relatedBy: .Equal, toItem: nil,             attribute: .Width,   multiplier: 1.0, constant: 4.0),
                 NSLayoutConstraint(item: stringView, attribute: .CenterX, relatedBy: .Equal, toItem: stringContainer, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+                
+                fingerOffsetConstraint,
+                NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: finger, attribute: .Width,   relatedBy: .Equal, toItem: nil,        attribute: .Width,   multiplier: 1.0, constant: fingerRadius * 2.0),
+                NSLayoutConstraint(item: finger, attribute: .Height,  relatedBy: .Equal, toItem: nil,        attribute: .Height,  multiplier: 1.0, constant: fingerRadius * 2.0),
             ]
             self.addConstraints(stringConstraints)
         }
