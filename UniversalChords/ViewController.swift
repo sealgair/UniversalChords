@@ -44,7 +44,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         Instrument(name:"Banjo", strings:[.D, .B, .D, .G]),
         Instrument(name:"Guitar", strings:[.E, .A, .D, .G, .B, .E]),
         Instrument(name:"Mandolin", strings:[.G, .D, .A, .E]),
-        Instrument(name:"Ukulele", strings:[.G, .D, .A, .E]),
+        Instrument(name:"Ukulele", strings:[.G, .C, .E, .A]),
     ]
     var instrument: Instrument!
     
@@ -145,10 +145,25 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    func getFingers(notes: PitchSet) -> [Int] {
+        if self.instrument == nil {
+            return [] // TODO: AAARRGGG
+        }
+        
+        var fingers: [Int] = []
+        let notes = Set(notes.map {n in n.chroma!})
+        
+        for string in self.instrument.strings {
+            var i = 0;
+            while !notes.contains(string + i) {
+                i++
+            }
+            fingers.append(i)
+        }
+        return fingers
+    }
+    
     func updateDiagram() {
-        diagram.instrument = self.instrument
-        diagram.fingers = [0, 1, 2, 3, 4, 5, 6 ,7, 8]
-        diagram.updateDiagram()
         
         let chromaIndex = chordPicker.selectedRowInComponent(0)
         let chroma = chromae[chromaIndex % chromae.count]
@@ -156,6 +171,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let quality = qualities[qualityIndex % qualities.count]
         let chord = Harmony.create(quality.intervals)
         let notes = chord(Pitch(chroma: chroma, octave: 1))
+        
+        diagram.instrument = self.instrument
+        diagram.fingers = getFingers(notes)
+        diagram.updateDiagram()
         
         var notesText = ""
         for note in notes {
