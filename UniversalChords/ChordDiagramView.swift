@@ -137,7 +137,7 @@ class ChordDiagramView: UIView {
                 stringContainer.addSubview(finger)
                 
                 self.addConstraints([
-                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: stringView, attribute: .Bottom,  multiplier: CGFloat(fingerIndex) / 5.0, constant: -5.0),
+                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerIndex) / 5.0, constant: -5.0),
                     NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                     NSLayoutConstraint(item: finger, attribute: .Width,   relatedBy: .Equal, toItem: nil,        attribute: .Width,   multiplier: 1.0, constant: fingerRadius * 2.0),
                     NSLayoutConstraint(item: finger, attribute: .Height,  relatedBy: .Equal, toItem: nil,        attribute: .Height,  multiplier: 1.0, constant: fingerRadius * 2.0),
