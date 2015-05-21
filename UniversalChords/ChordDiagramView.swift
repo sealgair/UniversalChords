@@ -126,7 +126,7 @@ class ChordDiagramView: UIView {
                 let fingerChroma = string + fingerIndex
                 let fingerRadius: CGFloat = 20.0
                 let finger = UILabel()
-                finger.text = fingerChroma.description
+                finger.text = fingerChroma.flatDescription
                 finger.backgroundColor = UIColor.blackColor()
                 finger.textColor = UIColor.whiteColor()
                 finger.textAlignment = .Center

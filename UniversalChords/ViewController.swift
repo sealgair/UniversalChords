@@ -26,7 +26,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     var chromaNames: [String] {
         return chromae.map { chroma in
-            chroma.description
+            chroma.flatDescription
         }
     }
     
@@ -119,7 +119,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let harmony = Harmony.create(quality.intervals)
         chord = harmony(Pitch(chroma: chroma, octave: 1))
         
-        chordLabel.text = "\(chroma) \(quality.symbol)"
+        chordLabel.text = "\(chroma.flatDescription) \(quality.symbol)"
         chordLabel.resignFirstResponder()
         
         updateDiagram()

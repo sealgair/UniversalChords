@@ -10,7 +10,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   MusicKit:
-    :commit: 9caad6f958381398a8f941f5ec979ee8b1f092f8
+    :commit: f61dfe12ef307ee14ffe92299912b700be94363d
     :git: https://github.com/sealgair/MusicKit.git
 
 SPEC CHECKSUMS:

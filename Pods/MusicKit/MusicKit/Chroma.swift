@@ -75,9 +75,31 @@ extension Chroma : Printable {
     public var description : String {
         let nameTupleOpt : ChromaNameTuple? = self.names.first
         if let (letterName, accidental) = nameTupleOpt {
-            return "\(letterName.description)\(accidental.description(true))"
+            return describe(letterName, accidental: accidental)
         }
         return ""
+    }
+    
+    public var flatDescription : String {
+        for (letterName, accidental) in self.names {
+            if accidental == .Natural || accidental == .Flat {
+                return describe(letterName, accidental: accidental)
+            }
+        }
+        return ""
+    }
+    
+    public var sharpDescription : String {
+        for (letterName, accidental) in self.names {
+            if accidental == .Natural || accidental == .Sharp {
+                return describe(letterName, accidental: accidental)
+            }
+        }
+        return ""
+    }
+    
+    func describe(letterName: LetterName, accidental: Accidental) -> String {
+        return "\(letterName.description)\(accidental.description(true))"
     }
 }
 
