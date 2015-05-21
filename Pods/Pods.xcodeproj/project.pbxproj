@@ -302,6 +302,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
+				TargetAttributes = {
+					37409FEA9B236B647E26DE2A = {
+						DevelopmentTeam = FMXTG86C6R;
+					};
+				};
 			};
 			buildConfigurationList = 3A05B10C7CBDEE752C3B0F34 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -405,6 +410,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CC1776E9F71CB0B09317E6A3 /* Pods-MusicKit-Private.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -420,6 +426,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-MusicKit/Pods-MusicKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = MusicKit;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -433,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CC1776E9F71CB0B09317E6A3 /* Pods-MusicKit-Private.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -448,6 +456,7 @@
 				MODULEMAP_FILE = "Target Support Files/Pods-MusicKit/Pods-MusicKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = MusicKit;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

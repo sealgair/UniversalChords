@@ -194,6 +194,7 @@
 				TargetAttributes = {
 					E807DB751AE73F3F002ED8A3 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = FMXTG86C6R;
 					};
 					E807DB8A1AE73F3F002ED8A3 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -426,9 +427,12 @@
 			baseConfigurationReference = 08097C7072A0B5B9E24139F7 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -437,9 +441,12 @@
 			baseConfigurationReference = FC280B0BE88A85D93B644D9F /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

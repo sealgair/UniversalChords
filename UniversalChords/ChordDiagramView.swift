@@ -123,9 +123,10 @@ class ChordDiagramView: UIView {
             
             let fingerIndex = fingers[i]
             if fingerIndex > 0 {
+                let fingerChroma = string + fingerIndex
                 let fingerRadius: CGFloat = 20.0
                 let finger = UILabel()
-                finger.text = String(fingerIndex)
+                finger.text = fingerChroma.description
                 finger.backgroundColor = UIColor.blackColor()
                 finger.textColor = UIColor.whiteColor()
                 finger.textAlignment = .Center
