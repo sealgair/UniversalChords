@@ -12,7 +12,7 @@ import MusicKit
 class ChordDiagramView: UIView {
     
     var instrument: Instrument!
-    var fingers: [Int]!
+    var fingers: Fingering!
     let fretBoard = UIView()
     let fretLabels = (0...4).map {i -> UILabel in
         let label = UILabel()
@@ -121,9 +121,9 @@ class ChordDiagramView: UIView {
             ]
             self.addConstraints(stringConstraints)
             
-            let fingerIndex = fingers[i]
-            if fingerIndex > 0 {
-                let fingerChroma = string + fingerIndex
+            let fingerData = fingers[i]
+            if fingerData.position > 0 {
+                let fingerChroma = fingerData.note
                 let fingerRadius: CGFloat = 20.0
                 let finger = UILabel()
                 finger.text = fingerChroma.flatDescription
@@ -137,7 +137,7 @@ class ChordDiagramView: UIView {
                 stringContainer.addSubview(finger)
                 
                 self.addConstraints([
-                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerIndex) / 5.0, constant: -5.0),
+                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerData.position) / 5.0, constant: -5.0),
                     NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                     NSLayoutConstraint(item: finger, attribute: .Width,   relatedBy: .Equal, toItem: nil,        attribute: .Width,   multiplier: 1.0, constant: fingerRadius * 2.0),
                     NSLayoutConstraint(item: finger, attribute: .Height,  relatedBy: .Equal, toItem: nil,        attribute: .Height,  multiplier: 1.0, constant: fingerRadius * 2.0),

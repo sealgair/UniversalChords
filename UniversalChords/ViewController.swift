@@ -9,6 +9,7 @@
 import UIKit
 import MusicKit
 
+
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let chordLabel = UITextField()
@@ -145,25 +146,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    func getFingers(notes: PitchSet) -> [Int] {
-        if self.instrument == nil {
-            return [] // TODO: AAARRGGG
-        }
-        
-        var fingers: [Int] = []
-        let notes = Set(notes.map {n in n.chroma!})
-        
-        for string in self.instrument.strings {
-            var i = 0;
-            while !notes.contains(string + i) {
-                i++
-            }
-            fingers.append(i)
-        }
-        return fingers
-    }
-    
     func updateDiagram() {
+        if instrument == nil {
+            return  // TODO: yuck :(
+        }
         
         let chromaIndex = chordPicker.selectedRowInComponent(0)
         let chroma = chromae[chromaIndex % chromae.count]
@@ -172,8 +158,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let chord = Harmony.create(quality.intervals)
         let notes = chord(Pitch(chroma: chroma, octave: 1))
         
-        diagram.instrument = self.instrument
-        diagram.fingers = getFingers(notes)
+        diagram.instrument = instrument
+        diagram.fingers = instrument.fingerings(notes)[0]
         diagram.updateDiagram()
         
         var notesText = ""
