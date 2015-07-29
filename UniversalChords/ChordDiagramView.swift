@@ -14,7 +14,7 @@ class ChordDiagramView: UIView {
     var instrument: Instrument!
     var fingers: Fingering!
     let fretBoard = UIView()
-    let fretLabels = (0...4).map {i -> UILabel in
+    let fretLabels = (0...11).map {i -> UILabel in
         let label = UILabel()
         label.text = String(i + 1)
         return label
@@ -28,9 +28,16 @@ class ChordDiagramView: UIView {
     
     init() {
         super.init(frame: CGRect())
+        self.userInteractionEnabled = true
+        self.clipsToBounds = true
+        
+        let fretScroll = UIScrollView()
+        fretScroll.clipsToBounds = false
+        fretScroll.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(fretScroll)
         
         fretBoard.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.addSubview(fretBoard)
+        fretScroll.addSubview(fretBoard)
         
         let nut = UIView()
         nut.backgroundColor = UIColor.blackColor()
@@ -43,11 +50,22 @@ class ChordDiagramView: UIView {
             NSLayoutConstraint(item: nut, attribute: .Right,  relatedBy: .Equal, toItem: fretBoard, attribute: .Right,  multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: nut, attribute: .Height, relatedBy: .Equal, toItem: nil,       attribute: .Height, multiplier: 1.0, constant: 5.0),
             
-            NSLayoutConstraint(item: fretBoard, attribute: .Left,   relatedBy: .Equal, toItem: self, attribute: .Left,   multiplier: 1.0, constant: 50.0),
-            NSLayoutConstraint(item: fretBoard, attribute: .Top,    relatedBy: .Equal, toItem: self, attribute: .Top,    multiplier: 1.0, constant: 50.0),
-            NSLayoutConstraint(item: fretBoard, attribute: .Right,  relatedBy: .Equal, toItem: self, attribute: .Right,  multiplier: 1.0, constant: -20.0),
-            NSLayoutConstraint(item: fretBoard, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
+            NSLayoutConstraint(item: fretScroll, attribute: .Left,   relatedBy: .Equal, toItem: self, attribute: .Left,   multiplier: 1.0, constant: 50.0),
+            NSLayoutConstraint(item: fretScroll, attribute: .Top,    relatedBy: .Equal, toItem: self, attribute: .Top,    multiplier: 1.0, constant: 50.0),
+            NSLayoutConstraint(item: fretScroll, attribute: .Right,  relatedBy: .Equal, toItem: self, attribute: .Right,  multiplier: 1.0, constant: -20.0),
+            NSLayoutConstraint(item: fretScroll, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
+
+            NSLayoutConstraint(item: fretBoard, attribute: .Top,    relatedBy: .Equal, toItem: fretScroll, attribute: .Top,    multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Left,   relatedBy: .Equal, toItem: fretScroll, attribute: .Left,   multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Bottom, relatedBy: .Equal, toItem: fretScroll, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Right,  relatedBy: .Equal, toItem: fretScroll, attribute: .Right,  multiplier: 1.0, constant: 0.0),
+            
+            NSLayoutConstraint(item: fretBoard, attribute: .Width,  relatedBy: .Equal, toItem: fretScroll, attribute: .Width,  multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: fretBoard, attribute: .Height, relatedBy: .Equal, toItem: fretScroll, attribute: .Height, multiplier: 1.0, constant: 600.0),
         ])
+        
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(0), metrics: [:], views: ["view": fretBoard]))
+        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(0), metrics: [:], views: ["view": fretBoard]))
         
         for (i, fretLabel) in enumerate(fretLabels) {
             fretBoard.addSubview(fretLabel)
@@ -137,7 +155,7 @@ class ChordDiagramView: UIView {
                 stringContainer.addSubview(finger)
                 
                 self.addConstraints([
-                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerData.position) / 5.0, constant: -5.0),
+                    NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerData.position) / CGFloat(fretLabels.count), constant: -5.0),
                     NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                     NSLayoutConstraint(item: finger, attribute: .Width,   relatedBy: .Equal, toItem: nil,        attribute: .Width,   multiplier: 1.0, constant: fingerRadius * 2.0),
                     NSLayoutConstraint(item: finger, attribute: .Height,  relatedBy: .Equal, toItem: nil,        attribute: .Height,  multiplier: 1.0, constant: fingerRadius * 2.0),
