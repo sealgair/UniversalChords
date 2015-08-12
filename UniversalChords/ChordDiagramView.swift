@@ -14,6 +14,7 @@ class ChordDiagramView: UIView {
     var instrument: Instrument!
     var fingers: Fingering!
     let fretBoard = UIView()
+    let stringLabels = UIView()
     let fretLabels = (0...11).map {i -> UILabel in
         let label = UILabel()
         label.text = String(i + 1)
@@ -39,6 +40,10 @@ class ChordDiagramView: UIView {
         fretBoard.setTranslatesAutoresizingMaskIntoConstraints(false)
         fretScroll.addSubview(fretBoard)
         
+        stringLabels.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(stringLabels)
+        stringLabels.backgroundColor = UIColor.whiteColor()
+        
         let nut = UIView()
         nut.backgroundColor = UIColor.blackColor()
         nut.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -62,6 +67,11 @@ class ChordDiagramView: UIView {
             
             NSLayoutConstraint(item: fretBoard, attribute: .Width,  relatedBy: .Equal, toItem: fretScroll, attribute: .Width,  multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: fretBoard, attribute: .Height, relatedBy: .Equal, toItem: fretScroll, attribute: .Height, multiplier: 1.0, constant: 600.0),
+            
+            NSLayoutConstraint(item: stringLabels, attribute: .Top,    relatedBy: .Equal, toItem: fretScroll, attribute: .Top,   multiplier: 1.0, constant: -50.0),
+            NSLayoutConstraint(item: stringLabels, attribute: .Left,   relatedBy: .Equal, toItem: self,       attribute: .Left,  multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: stringLabels, attribute: .Right,  relatedBy: .Equal, toItem: self,       attribute: .Right, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: stringLabels, attribute: .Bottom, relatedBy: .Equal, toItem: fretScroll, attribute: .Top,   multiplier: 1.0, constant: 0.0),
         ])
         
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(0), metrics: [:], views: ["view": fretBoard]))
@@ -107,7 +117,7 @@ class ChordDiagramView: UIView {
             stringLabel.text = string.description
             stringLabel.font = stringLabel.font.fontWithSize(22)
             stringLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-            stringContainer.addSubview(stringLabel)
+            stringLabels.addSubview(stringLabel)
             
             let stringView = UIView()
             stringView.backgroundColor = UIColor.blackColor()
@@ -129,7 +139,7 @@ class ChordDiagramView: UIView {
                 NSLayoutConstraint(item: stringContainer, attribute: .Top,    relatedBy: .Equal, toItem: fretBoard, attribute: .Top,    multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: stringContainer, attribute: .Bottom, relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
                 
-                NSLayoutConstraint(item: stringLabel, attribute: .Bottom,  relatedBy: .Equal, toItem: stringContainer, attribute: .Top,     multiplier: 1.0, constant: -5.0),
+                NSLayoutConstraint(item: stringLabel, attribute: .Bottom,  relatedBy: .Equal, toItem: stringLabels,    attribute: .Bottom,  multiplier: 1.0, constant: -5.0),
                 NSLayoutConstraint(item: stringLabel, attribute: .CenterX, relatedBy: .Equal, toItem: stringContainer, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                 
                 NSLayoutConstraint(item: stringView, attribute: .Top,     relatedBy: .Equal, toItem: stringContainer, attribute: .Top,     multiplier: 1.0, constant: 0.0),
