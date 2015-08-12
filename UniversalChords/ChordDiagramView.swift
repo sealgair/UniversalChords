@@ -9,13 +9,14 @@
 import UIKit
 import MusicKit
 
-class ChordDiagramView: UIView {
+class ChordDiagramView: UIView, UIScrollViewDelegate {
     
     var instrument: Instrument!
     var chord: PitchSet!
+    let fretScroll = UIScrollView()
     let fretBoard = UIView()
     let stringLabels = UIView()
-    let fretLabels = (0...11).map {i -> UILabel in
+    let fretLabels = (0...15).map {i -> UILabel in
         let label = UILabel()
         label.text = String(i + 1)
         return label
@@ -32,9 +33,9 @@ class ChordDiagramView: UIView {
         self.userInteractionEnabled = true
         self.clipsToBounds = true
         
-        let fretScroll = UIScrollView()
         fretScroll.clipsToBounds = false
         fretScroll.setTranslatesAutoresizingMaskIntoConstraints(false)
+        fretScroll.delegate = self
         self.addSubview(fretScroll)
         
         fretBoard.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -105,10 +106,39 @@ class ChordDiagramView: UIView {
         stringViews.map {v in v.removeFromSuperview()}
         stringViews = []
         
+        let fretHeight = fretBoard.frame.height / CGFloat(fretLabels.count)
+        var absoluteOffset: CGFloat!
+        var topFret = 0
+        for i in 0..<fretLabels.count {
+            let fretFrame = self.convertRect(CGRect(x: 0, y: CGFloat(i) * fretHeight, width: 0, height: 0), fromView: fretScroll)
+            let fretOffset = fretFrame.maxY - stringLabels.frame.maxY
+            if absoluteOffset == nil {
+                absoluteOffset = fretOffset
+            }
+            if absoluteOffset > -10 || fretOffset > 45 {
+                topFret = i
+                break
+            }
+        }
+        
         if instrument == nil || chord == nil {
             return
         }
-        let fingers = instrument.fingerings(chord)[0]
+        let fingerings = instrument.fingerings(chord)
+        var fingers = fingerings[0]
+        for fingering in fingerings {
+            var goodFret = true
+            for finger in fingering {
+                if finger.position < topFret {
+                    goodFret = false
+                    break
+                }
+            }
+            if goodFret {
+                fingers = fingering
+                break
+            }
+        }
         
         for (i, string) in enumerate(instrument.strings) {
             let stringContainer = UIView()
@@ -173,5 +203,12 @@ class ChordDiagramView: UIView {
                 ])
             }
         }
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        updateDiagram()
+    }
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        updateDiagram()
     }
 }
