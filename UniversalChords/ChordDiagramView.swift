@@ -12,7 +12,7 @@ import MusicKit
 class ChordDiagramView: UIView {
     
     var instrument: Instrument!
-    var fingers: Fingering!
+    var chord: PitchSet!
     let fretBoard = UIView()
     let stringLabels = UIView()
     let fretLabels = (0...11).map {i -> UILabel in
@@ -100,14 +100,15 @@ class ChordDiagramView: UIView {
     }
     
     func updateDiagram() {
-        self.removeConstraints(stringConstraints)
+        removeConstraints(stringConstraints)
         stringConstraints = []
         stringViews.map {v in v.removeFromSuperview()}
         stringViews = []
         
-        if instrument == nil || fingers == nil {
+        if instrument == nil || chord == nil {
             return
         }
+        let fingers = instrument.fingerings(chord)[0]
         
         for (i, string) in enumerate(instrument.strings) {
             let stringContainer = UIView()

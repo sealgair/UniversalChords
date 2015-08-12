@@ -156,20 +156,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let qualityIndex = chordPicker.selectedRowInComponent(1)
         let quality = qualities[qualityIndex % qualities.count]
         let chord = Harmony.create(quality.intervals)
-        let notes = chord(Pitch(chroma: chroma, octave: 1))
         
         diagram.instrument = instrument
-        diagram.fingers = instrument.fingerings(notes)[0]
+        diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
         diagram.updateDiagram()
-        
-        var notesText = ""
-        for note in notes {
-            if let chroma = note.chroma {
-                notesText += " " + chroma.description
-            } else {
-                notesText += " ?"
-            }
-        }
     }
     
     // Mark: UIPickerViewDataSource
