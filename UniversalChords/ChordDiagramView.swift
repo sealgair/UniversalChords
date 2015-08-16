@@ -11,6 +11,9 @@ import MusicKit
 
 class ChordDiagramView: UIView, UIScrollViewDelegate {
     
+    let fretColor = UIColor.orangeColor()
+    let stringColor = UIColor.grayColor()
+    
     var instrument: Instrument!
     var chord: PitchSet!
     let fretScroll = UIScrollView()
@@ -84,7 +87,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             let offset = CGFloat(i + 1) / CGFloat(fretLabels.count)
             
             let fretView = UIView()
-            fretView.backgroundColor = UIColor.blackColor()
+            fretView.backgroundColor = fretColor
             fretLabel.addSubview(fretView)
             fretView.setTranslatesAutoresizingMaskIntoConstraints(false)
             
@@ -95,7 +98,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 NSLayoutConstraint(item: fretView, attribute: .CenterY, relatedBy: .Equal, toItem: fretLabel, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: fretView, attribute: .Left,    relatedBy: .Equal, toItem: fretBoard, attribute: .Left,    multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: fretView, attribute: .Right,   relatedBy: .Equal, toItem: fretBoard, attribute: .Right,   multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: fretView, attribute: .Height,  relatedBy: .Equal, toItem: nil,       attribute: .Height,  multiplier: 1.0, constant: 2.0),
+                NSLayoutConstraint(item: fretView, attribute: .Height,  relatedBy: .Equal, toItem: nil,       attribute: .Height,  multiplier: 1.0, constant: 3.0),
             ])
         }
     }
@@ -151,7 +154,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             stringLabels.addSubview(stringLabel)
             
             let stringView = UIView()
-            stringView.backgroundColor = UIColor.blackColor()
+            stringView.backgroundColor = stringColor
             stringView.setTranslatesAutoresizingMaskIntoConstraints(false)
             stringContainer.addSubview(stringView)
             
