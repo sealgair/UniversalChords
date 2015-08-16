@@ -143,6 +143,10 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             }
         }
         
+        for sl in stringLabels.subviews {
+            sl.removeFromSuperview()
+        }
+        
         for (i, string) in enumerate(instrument.strings) {
             let stringContainer = UIView()
             stringViews.append(stringContainer)
