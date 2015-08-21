@@ -12,7 +12,6 @@
 		E807DB7E1AE73F3F002ED8A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DB7D1AE73F3F002ED8A3 /* ViewController.swift */; };
 		E807DB811AE73F3F002ED8A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E807DB7F1AE73F3F002ED8A3 /* Main.storyboard */; };
 		E807DB831AE73F3F002ED8A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E807DB821AE73F3F002ED8A3 /* Images.xcassets */; };
-		E807DB861AE73F3F002ED8A3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */; };
 		E807DB921AE73F3F002ED8A3 /* UniversalChordsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DB911AE73F3F002ED8A3 /* UniversalChordsTests.swift */; };
 		E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B51B07E30C0027C77F /* ChordDiagramView.swift */; };
 		E83863B81B07E3800027C77F /* Instrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B71B07E3800027C77F /* Instrument.swift */; };
@@ -38,7 +37,6 @@
 		E807DB7D1AE73F3F002ED8A3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E807DB801AE73F3F002ED8A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E807DB821AE73F3F002ED8A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E807DB851AE73F3F002ED8A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E807DB8B1AE73F3F002ED8A3 /* UniversalChordsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UniversalChordsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E807DB901AE73F3F002ED8A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E807DB911AE73F3F002ED8A3 /* UniversalChordsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalChordsTests.swift; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				E83863B71B07E3800027C77F /* Instrument.swift */,
 				E807DB7F1AE73F3F002ED8A3 /* Main.storyboard */,
 				E807DB821AE73F3F002ED8A3 /* Images.xcassets */,
-				E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */,
 				E807DB791AE73F3F002ED8A3 /* Supporting Files */,
 				E83E91331B1291B2008CA57D /* Finger.swift */,
 			);
@@ -230,7 +227,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E807DB811AE73F3F002ED8A3 /* Main.storyboard in Resources */,
-				E807DB861AE73F3F002ED8A3 /* LaunchScreen.xib in Resources */,
 				E807DB831AE73F3F002ED8A3 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,14 +328,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E807DB851AE73F3F002ED8A3 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -431,6 +419,7 @@
 			baseConfigurationReference = 08097C7072A0B5B9E24139F7 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
@@ -446,6 +435,7 @@
 			baseConfigurationReference = FC280B0BE88A85D93B644D9F /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
