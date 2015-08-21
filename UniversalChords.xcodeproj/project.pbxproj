@@ -17,6 +17,7 @@
 		E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B51B07E30C0027C77F /* ChordDiagramView.swift */; };
 		E83863B81B07E3800027C77F /* Instrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B71B07E3800027C77F /* Instrument.swift */; };
 		E83E91341B1291B2008CA57D /* Finger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E91331B1291B2008CA57D /* Finger.swift */; };
+		E8A5540A1B86DD0500C00ABE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8A554091B86DD0500C00ABE /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +33,7 @@
 /* Begin PBXFileReference section */
 		08097C7072A0B5B9E24139F7 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		95153A60EB93911961A02EB2 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E807DB761AE73F3F002ED8A3 /* UniversalChords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UniversalChords.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E807DB761AE73F3F002ED8A3 /* Chords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E807DB7A1AE73F3F002ED8A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E807DB7B1AE73F3F002ED8A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E807DB7D1AE73F3F002ED8A3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -45,6 +46,7 @@
 		E83863B51B07E30C0027C77F /* ChordDiagramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChordDiagramView.swift; sourceTree = "<group>"; };
 		E83863B71B07E3800027C77F /* Instrument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instrument.swift; sourceTree = "<group>"; };
 		E83E91331B1291B2008CA57D /* Finger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Finger.swift; sourceTree = "<group>"; };
+		E8A554091B86DD0500C00ABE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		FC280B0BE88A85D93B644D9F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,7 +91,7 @@
 		E807DB771AE73F3F002ED8A3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E807DB761AE73F3F002ED8A3 /* UniversalChords.app */,
+				E807DB761AE73F3F002ED8A3 /* Chords.app */,
 				E807DB8B1AE73F3F002ED8A3 /* UniversalChordsTests.xctest */,
 			);
 			name = Products;
@@ -107,6 +109,7 @@
 				E807DB841AE73F3F002ED8A3 /* LaunchScreen.xib */,
 				E807DB791AE73F3F002ED8A3 /* Supporting Files */,
 				E83E91331B1291B2008CA57D /* Finger.swift */,
+				E8A554091B86DD0500C00ABE /* Media.xcassets */,
 			);
 			path = UniversalChords;
 			sourceTree = "<group>";
@@ -165,7 +168,7 @@
 			);
 			name = UniversalChords;
 			productName = UniversalChords;
-			productReference = E807DB761AE73F3F002ED8A3 /* UniversalChords.app */;
+			productReference = E807DB761AE73F3F002ED8A3 /* Chords.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E807DB8A1AE73F3F002ED8A3 /* UniversalChordsTests */ = {
@@ -231,6 +234,7 @@
 			files = (
 				E807DB811AE73F3F002ED8A3 /* Main.storyboard in Resources */,
 				E807DB861AE73F3F002ED8A3 /* LaunchScreen.xib in Resources */,
+				E8A5540A1B86DD0500C00ABE /* Media.xcassets in Resources */,
 				E807DB831AE73F3F002ED8A3 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,7 +439,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Chords;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -450,7 +454,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UniversalChords/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Chords;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
