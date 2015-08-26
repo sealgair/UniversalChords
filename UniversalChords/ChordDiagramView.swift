@@ -10,12 +10,19 @@ import UIKit
 import MusicKit
 
 class ChordDiagramView: UIView, UIScrollViewDelegate {
-    
     let fretColor = UIColor.orangeColor()
     let stringColor = UIColor.grayColor()
     
-    var instrument: Instrument!
-    var chord: PitchSet!
+    var instrument: Instrument! {
+        didSet {
+            updateDiagram()
+        }
+    }
+    var chord: PitchSet! {
+        didSet {
+            updateDiagram()
+        }
+    }
     let fretScroll = UIScrollView()
     let fretBoard = UIView()
     let stringLabels = UIView()
@@ -25,7 +32,9 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         return label
     }
     var stringViews: [UIView] = []
+    var fingerViews: [UIView] = []
     var stringConstraints: [NSLayoutConstraint] = []
+    var topFret = 0
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -109,38 +118,8 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         stringViews.map {v in v.removeFromSuperview()}
         stringViews = []
         
-        let fretHeight = fretBoard.frame.height / CGFloat(fretLabels.count)
-        var absoluteOffset: CGFloat!
-        var topFret = 0
-        for i in 0..<fretLabels.count {
-            let fretFrame = self.convertRect(CGRect(x: 0, y: CGFloat(i) * fretHeight, width: 0, height: 0), fromView: fretScroll)
-            let fretOffset = fretFrame.maxY - stringLabels.frame.maxY
-            if absoluteOffset == nil {
-                absoluteOffset = fretOffset
-            }
-            if absoluteOffset > -10 || fretOffset > 45 {
-                topFret = i
-                break
-            }
-        }
-        
         if instrument == nil || chord == nil {
             return
-        }
-        let fingerings = instrument.fingerings(chord)
-        var fingers = fingerings[0]
-        for fingering in fingerings {
-            var goodFret = true
-            for finger in fingering {
-                if finger.position < topFret {
-                    goodFret = false
-                    break
-                }
-            }
-            if goodFret {
-                fingers = fingering
-                break
-            }
         }
         
         for sl in stringLabels.subviews {
@@ -149,6 +128,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         
         for (i, string) in enumerate(instrument.strings) {
             let stringContainer = UIView()
+            stringContainer.tag = i
             stringViews.append(stringContainer)
             
             let stringLabel = UILabel()
@@ -186,8 +166,59 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 NSLayoutConstraint(item: stringView, attribute: .CenterX, relatedBy: .Equal, toItem: stringContainer, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
             ]
             self.addConstraints(stringConstraints)
-            
-            let fingerData = fingers[i]
+        }
+        updateFingers(force: true)
+    }
+    
+    func updateFingers(force: Bool = false) {
+        if instrument == nil || chord == nil {
+            return
+        }
+        if stringViews.count <= 0 {
+            self.updateDiagram()
+            return
+        }
+        
+        let fretHeight = fretBoard.frame.height / CGFloat(fretLabels.count)
+        var absoluteOffset: CGFloat!
+        var newTopFret = 0
+        for i in 0..<fretLabels.count {
+            let fretFrame = self.convertRect(CGRect(x: 0, y: CGFloat(i) * fretHeight, width: 0, height: 0), fromView: fretScroll)
+            let fretOffset = fretFrame.maxY - stringLabels.frame.maxY
+            if absoluteOffset == nil {
+                absoluteOffset = fretOffset
+            }
+            if absoluteOffset > -10 || fretOffset > 45 {
+                newTopFret = i
+                break
+            }
+        }
+        if !force && newTopFret == topFret {
+            return
+        }
+        topFret = newTopFret
+        for finger in fingerViews {
+            finger.removeFromSuperview()
+        }
+        fingerViews = []
+        
+        let fingerings = instrument.fingerings(chord)
+        var fingers = fingerings[0]
+        for fingering in fingerings {
+            var goodFret = true
+            for finger in fingering {
+                if finger.position < topFret {
+                    goodFret = false
+                    break
+                }
+            }
+            if goodFret {
+                fingers = fingering
+                break
+            }
+        }
+        for stringContainer in stringViews {
+            let fingerData = fingers[stringContainer.tag]
             if fingerData.position > 0 {
                 let fingerChroma = fingerData.note
                 let fingerRadius: CGFloat = 20.0
@@ -201,10 +232,11 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 finger.layer.masksToBounds = true
                 finger.setTranslatesAutoresizingMaskIntoConstraints(false)
                 stringContainer.addSubview(finger)
+                fingerViews.append(finger)
                 
                 self.addConstraints([
                     NSLayoutConstraint(item: finger, attribute: .Bottom,  relatedBy: .Equal, toItem: fretBoard, attribute: .Bottom,  multiplier: CGFloat(fingerData.position) / CGFloat(fretLabels.count), constant: -5.0),
-                    NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+                    NSLayoutConstraint(item: finger, attribute: .CenterX, relatedBy: .Equal, toItem: stringContainer, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
                     NSLayoutConstraint(item: finger, attribute: .Width,   relatedBy: .Equal, toItem: nil,        attribute: .Width,   multiplier: 1.0, constant: fingerRadius * 2.0),
                     NSLayoutConstraint(item: finger, attribute: .Height,  relatedBy: .Equal, toItem: nil,        attribute: .Height,  multiplier: 1.0, constant: fingerRadius * 2.0),
                 ])
@@ -212,10 +244,13 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         }
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        updateFingers()
+    }
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        updateDiagram()
+        updateFingers()
     }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        updateDiagram()
+        updateFingers()
     }
 }

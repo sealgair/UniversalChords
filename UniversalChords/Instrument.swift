@@ -46,7 +46,7 @@ struct Instrument {
         let notes = Set(notes.map {n in n.chroma!})
         
         let goodFretsByString: [[Finger]] = strings.map { string in
-            let frets = filter(0...14) { i in
+            let frets = filter(0...15) { i in
                 return notes.contains(string + i)
             }
             return frets.map { i in
