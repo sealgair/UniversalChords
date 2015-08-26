@@ -9,6 +9,16 @@
 import UIKit
 import MusicKit
 
+class ObjectWrapper : NSObject {
+    let value: Any
+    
+    init(value: Any) {
+        self.value = value
+    }
+}
+
+let fingerCache = NSCache()
+
 struct Instrument {
     let name: String
     let strings: [Chroma]
@@ -27,6 +37,12 @@ struct Instrument {
     }
     
     func fingerings(notes: PitchSet) -> [Fingering] {
+        let cacheKey = "\(name):" + ":".join(notes.map { $0.noteName! })
+        if let wrapper = fingerCache.objectForKey(cacheKey) as? ObjectWrapper,
+            let fingerings = wrapper.value as? [Fingering] {
+            return fingerings
+        }
+        
         let notes = Set(notes.map {n in n.chroma!})
         
         let goodFretsByString: [[Finger]] = strings.map { string in
@@ -50,6 +66,7 @@ struct Instrument {
             }
             return true
         }
+        fingerCache.setObject(ObjectWrapper(value:fingerings), forKey: cacheKey)
         return fingerings
     }
 }
