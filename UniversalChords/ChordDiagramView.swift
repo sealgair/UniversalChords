@@ -48,6 +48,8 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         fretScroll.clipsToBounds = false
         fretScroll.setTranslatesAutoresizingMaskIntoConstraints(false)
         fretScroll.delegate = self
+        fretScroll.showsHorizontalScrollIndicator = false
+        fretScroll.showsVerticalScrollIndicator = false
         self.addSubview(fretScroll)
         
         fretBoard.setTranslatesAutoresizingMaskIntoConstraints(false)
