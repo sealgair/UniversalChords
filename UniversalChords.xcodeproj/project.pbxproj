@@ -16,6 +16,7 @@
 		E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B51B07E30C0027C77F /* ChordDiagramView.swift */; };
 		E83863B81B07E3800027C77F /* Instrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83863B71B07E3800027C77F /* Instrument.swift */; };
 		E83E91341B1291B2008CA57D /* Finger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83E91331B1291B2008CA57D /* Finger.swift */; };
+		E8A3BE781B8EE32E0047B3B3 /* ObjectWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A3BE771B8EE32E0047B3B3 /* ObjectWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		E83863B51B07E30C0027C77F /* ChordDiagramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChordDiagramView.swift; sourceTree = "<group>"; };
 		E83863B71B07E3800027C77F /* Instrument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instrument.swift; sourceTree = "<group>"; };
 		E83E91331B1291B2008CA57D /* Finger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Finger.swift; sourceTree = "<group>"; };
+		E8A3BE771B8EE32E0047B3B3 /* ObjectWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectWrapper.swift; sourceTree = "<group>"; };
 		FC280B0BE88A85D93B644D9F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +106,7 @@
 				E807DB821AE73F3F002ED8A3 /* Images.xcassets */,
 				E807DB791AE73F3F002ED8A3 /* Supporting Files */,
 				E83E91331B1291B2008CA57D /* Finger.swift */,
+				E8A3BE771B8EE32E0047B3B3 /* ObjectWrapper.swift */,
 			);
 			path = UniversalChords;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */,
 				E807DB7E1AE73F3F002ED8A3 /* ViewController.swift in Sources */,
 				E807DB7C1AE73F3F002ED8A3 /* AppDelegate.swift in Sources */,
+				E8A3BE781B8EE32E0047B3B3 /* ObjectWrapper.swift in Sources */,
 				E83E91341B1291B2008CA57D /* Finger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
