@@ -76,8 +76,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.chooseChord()
         view.addSubview(chordLabel)
         
-        updateDiagram()
-        
         instrumentPicker.delegate = self
         instrumentPicker.dataSource = self
         
@@ -122,14 +120,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let chroma = chromae[chromaIndex % chromae.count]
         let qualityIndex = qualityPicker.selectedSegmentIndex
         let quality = qualities[qualityIndex]
-        
-        let harmony = Harmony.create(quality.intervals)
-        chord = harmony(Pitch(chroma: chroma, octave: 1))
+        let chord = Harmony.create(quality.intervals)
         
         chordLabel.text = "\(chroma.flatDescription) \(quality.symbol)"
         chordLabel.resignFirstResponder()
         
-        updateDiagram()
+        diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
     }
     
     func chooseInstrument() {
@@ -138,7 +134,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentLabel.text = instrument.name
         instrumentLabel.resignFirstResponder()
         
-        updateDiagram()
+        diagram.instrument = instrument
     }
     
     func choices(picker:UIPickerView) -> [[String]] {
@@ -150,22 +146,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         default:
             return [[]]
         }
-    }
-    
-    func updateDiagram() {
-        if instrument == nil {
-            return  // TODO: yuck :(
-        }
-        
-        let chromaIndex = notePicker.selectedRowInComponent(0)
-        let chroma = chromae[chromaIndex % chromae.count]
-        let qualityIndex = qualityPicker.selectedSegmentIndex
-        let quality = qualities[qualityIndex]
-        let chord = Harmony.create(quality.intervals)
-        
-        diagram.instrument = instrument
-        diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
-        diagram.updateDiagram()
     }
     
     // Mark: UIPickerViewDataSource
