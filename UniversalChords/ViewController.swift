@@ -36,9 +36,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         .Major,
         .Minor,
         .DominantSeventh,
+        .MinorSeventh,
+        .Sus2,
+        .Sus4,
         .Augmented,
         .Diminished,
-        .MinorSeventh,
     ]
     var chord: PitchSet!
     
@@ -68,10 +70,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         qualityPicker.setTranslatesAutoresizingMaskIntoConstraints(false)
         qualityPicker.tintColor = UIColor.blackColor()
         qualityPicker.addTarget(self, action: "chooseChord", forControlEvents: UIControlEvents.ValueChanged)
+        qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .Compact
         view.addSubview(qualityPicker)
         
-        chordLabel.font = chordLabel.font.fontWithSize(28)
-        chordLabel.textAlignment = .Center
+        chordLabel.font = chordLabel.font.fontWithSize(25)
+        chordLabel.adjustsFontSizeToFitWidth = true
+        chordLabel.textAlignment = .Left
         notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
         self.chooseChord()
         view.addSubview(chordLabel)
@@ -104,6 +108,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             NSLayoutConstraint(item: diagram, attribute: .Bottom, relatedBy: .Equal, toItem: instrumentLabel, attribute: .Top,    multiplier: 1.0, constant: -10.0),
             
             NSLayoutConstraint(item: chordLabel, attribute: .Top,   relatedBy: .Equal, toItem: view,          attribute: .Top,   multiplier: 1.0, constant: padding),
+            NSLayoutConstraint(item: chordLabel, attribute: .Width, relatedBy: .Equal, toItem: nil,           attribute: .Width, multiplier: 1.0, constant: 60.0),
             NSLayoutConstraint(item: chordLabel, attribute: .Right, relatedBy: .Equal, toItem: view,          attribute: .Right, multiplier: 1.0, constant: -10.0),
             
             NSLayoutConstraint(item: qualityPicker, attribute: .Top,   relatedBy: .Equal, toItem: view,       attribute: .Top,  multiplier: 1.0, constant: padding),
@@ -122,7 +127,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let quality = qualities[qualityIndex]
         let chord = Harmony.create(quality.intervals)
         
-        chordLabel.text = "\(chroma.flatDescription) \(quality.symbol)"
+        if quality == .Major {
+            chordLabel.text = chroma.flatDescription
+        } else {
+            chordLabel.text = "\(chroma.flatDescription) \(quality.symbol)"
+        }
         chordLabel.resignFirstResponder()
         
         diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
