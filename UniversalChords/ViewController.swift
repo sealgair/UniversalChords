@@ -80,20 +80,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         instrumentPicker.delegate = self
         instrumentPicker.dataSource = self
-        let instrumentPickerAccessory = UIToolbar()
-        instrumentPickerAccessory.setItems([
-            UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: "Pick", style: .Done, target: self, action: "chooseInstrument")
-        ], animated: false)
         
         instrumentLabel.inputView = instrumentPicker
-        instrumentLabel.inputAccessoryView = instrumentPickerAccessory
         instrumentLabel.font = instrumentLabel.font.fontWithSize(18)
         instrumentLabel.textAlignment = .Center
         instrumentPicker.selectRow(1, inComponent: 0, animated: false)
         self.chooseInstrument()
         view.addSubview(instrumentLabel)
-        instrumentPickerAccessory.sizeToFit()
         
         view.addSubview(diagram)
         diagram.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -119,7 +112,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             NSLayoutConstraint(item: qualityPicker, attribute: .Left,  relatedBy: .Equal, toItem: view,       attribute: .Left, multiplier: 1.0, constant: 10.0),
             NSLayoutConstraint(item: qualityPicker, attribute: .Right, relatedBy: .Equal, toItem: chordLabel, attribute: .Left, multiplier: 1.0, constant: -10.0),
             
-            NSLayoutConstraint(item: instrumentLabel, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -padding),
+            NSLayoutConstraint(item: instrumentLabel, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
             NSLayoutConstraint(item: instrumentLabel, attribute: .Width,  relatedBy: .Equal, toItem: view, attribute: .Width,  multiplier: 1.0, constant: 0.0),
         ])
     }
@@ -201,6 +194,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             chooseChord()
             let componentChoices = choices(pickerView)[component]
             pickerView.selectRow(row % componentChoices.count + circleSize * componentChoices.count, inComponent: component, animated: false)
+        } else if pickerView == instrumentPicker {
+            chooseInstrument()
         }
     }
 }
