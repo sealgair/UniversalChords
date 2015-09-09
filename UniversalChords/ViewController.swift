@@ -10,6 +10,12 @@ import UIKit
 import MusicKit
 
 
+let kSavedInstrumentName = "kSavedInstrumentName"
+let kSavedChroma = "kSavedChroma"
+let kSavedQuality = "kSavedQuality"
+
+
+
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let chordLabel = UITextField()
@@ -77,7 +83,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.adjustsFontSizeToFitWidth = true
         chordLabel.textAlignment = .Left
         notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
-        self.chooseChord()
         view.addSubview(chordLabel)
         
         instrumentPicker.delegate = self
@@ -87,7 +92,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentLabel.font = instrumentLabel.font.fontWithSize(18)
         instrumentLabel.textAlignment = .Center
         instrumentPicker.selectRow(1, inComponent: 0, animated: false)
-        self.chooseInstrument()
         view.addSubview(instrumentLabel)
         
         view.addSubview(diagram)
@@ -118,6 +122,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             NSLayoutConstraint(item: instrumentLabel, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
             NSLayoutConstraint(item: instrumentLabel, attribute: .Width,  relatedBy: .Equal, toItem: view, attribute: .Width,  multiplier: 1.0, constant: 0.0),
         ])
+        loadState()
+        self.chooseInstrument()
+        self.chooseChord()
     }
     
     func chooseChord() {
@@ -135,6 +142,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.resignFirstResponder()
         
         diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
+        
+        NSUserDefaults.standardUserDefaults().setObject(NSNumber(unsignedLong: chroma.rawValue), forKey: kSavedChroma)
     }
     
     func chooseInstrument() {
@@ -144,6 +153,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentLabel.resignFirstResponder()
         
         diagram.instrument = instrument
+        
+        NSUserDefaults.standardUserDefaults().setObject(instrument.name, forKey: kSavedInstrumentName)
     }
     
     func choices(picker:UIPickerView) -> [[String]] {
@@ -154,6 +165,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             return [instruments.map {i in i.name}]
         default:
             return [[]]
+        }
+    }
+    
+    // Mark: NSUserDefaults
+    
+    func loadState() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let savedInstrumentName = defaults.objectForKey(kSavedInstrumentName) as? String {
+            for (i, instrument) in enumerate(instruments) {
+                if instrument.name == savedInstrumentName {
+                    instrumentPicker.selectRow(i, inComponent: 0, animated: false)
+                }
+            }
         }
     }
     
