@@ -144,6 +144,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
         
         NSUserDefaults.standardUserDefaults().setObject(NSNumber(unsignedLong: chroma.rawValue), forKey: kSavedChroma)
+        NSUserDefaults.standardUserDefaults().setObject(quality.description, forKey: kSavedQuality)
     }
     
     func chooseInstrument() {
@@ -176,6 +177,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             for (i, instrument) in enumerate(instruments) {
                 if instrument.name == savedInstrumentName {
                     instrumentPicker.selectRow(i, inComponent: 0, animated: false)
+                    break
+                }
+            }
+        }
+        if let savedChroma = defaults.objectForKey(kSavedChroma) as? NSNumber {
+            notePicker.selectRow(chromae.count * circleSize + savedChroma.integerValue, inComponent: 0, animated: false)
+        }
+        if let savedQuality = defaults.objectForKey(kSavedQuality) as? String {
+            for (i, quality) in enumerate(qualities) {
+                if quality.description == savedQuality {
+                    qualityPicker.selectedSegmentIndex = i
+                    break
                 }
             }
         }
