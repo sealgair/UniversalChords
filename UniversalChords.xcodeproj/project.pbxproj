@@ -465,7 +465,7 @@
 				INFOPLIST_FILE = UniversalChordsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UniversalChords.app/UniversalChords";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chords.app/Chords";
 			};
 			name = Debug;
 		};
@@ -480,7 +480,7 @@
 				INFOPLIST_FILE = UniversalChordsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UniversalChords.app/UniversalChords";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chords.app/Chords";
 			};
 			name = Release;
 		};
