@@ -51,7 +51,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var chord: PitchSet!
     
     let instruments = [
-        Instrument(name:"Banjo", strings:[.D, .B, .D, .G]),
+        Instrument(name:"Banjo", strings:[.D, .G, .B, .D]),
         Instrument(name:"Guitar", strings:[.E, .A, .D, .G, .B, .E]),
         Instrument(name:"Mandolin", strings:[.G, .D, .A, .E]),
         Instrument(name:"Ukulele", strings:[.G, .C, .E, .A]),
