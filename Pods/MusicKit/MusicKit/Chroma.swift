@@ -71,7 +71,7 @@ public enum Chroma : UInt {
 }
 
 // MARK: Printable
-extension Chroma : Printable {
+extension Chroma : CustomStringConvertible {
     public var description : String {
         let nameTupleOpt : ChromaNameTuple? = self.names.first
         if let (letterName, accidental) = nameTupleOpt {

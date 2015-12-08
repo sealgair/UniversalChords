@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum LetterName : UInt, Printable {
+public enum LetterName : UInt, CustomStringConvertible {
     case C = 0
     case D = 1
     case E = 2

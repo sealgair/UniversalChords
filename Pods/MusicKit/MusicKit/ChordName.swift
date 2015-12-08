@@ -2,34 +2,6 @@
 
 import Foundation
 
-/// defines arrays of ChordQuality
-struct ChordGroup {
-    static let Triads = [
-        ChordQuality.Major,
-        ChordQuality.Minor,
-        ChordQuality.Augmented,
-        ChordQuality.Diminished,
-        ChordQuality.Sus2,
-        ChordQuality.Sus4
-    ]
-    static let Tetrads = [
-        ChordQuality.DominantSeventh,
-        ChordQuality.MajorSeventh,
-        ChordQuality.MinorMajorSeventh,
-        ChordQuality.MinorSeventh,
-        ChordQuality.AugmentedMajorSeventh,
-        ChordQuality.AugmentedSeventh,
-        ChordQuality.HalfDiminishedSeventh,
-        ChordQuality.DiminishedSeventh,
-        ChordQuality.DominantSeventhFlatFive,
-        ChordQuality.MajorSeventhFlatFive,
-        ChordQuality.DominantSeventhSusFour,
-        ChordQuality.MajorSeventhSusFour,
-        ChordQuality.MajorSixth,
-        ChordQuality.MinorSixth,
-    ]
-}
-
 extension PitchSet {
     /// Normalizes the pitch set by deduping and collapsing to within an octave
     /// while maintaining the root.
@@ -44,13 +16,13 @@ extension Chord {
     public static func name(pitchSet: PitchSet) -> String? {
         if let desc = descriptor(pitchSet) {
             let rootName = desc.root.description
-            let symbol = desc.quality.symbol
+            let quality = desc.quality.description
             if desc.root == desc.bass {
-                return "\(rootName)\(symbol)"
+                return "\(rootName)\(quality)"
             }
             else {
                 let bassName = desc.bass.description
-                return "\(rootName)\(symbol)/\(bassName)"
+                return "\(rootName)\(quality)/\(bassName)"
             }
         }
         return nil
@@ -64,42 +36,64 @@ extension Chord {
         let gamutCount = pitchSet.gamut().count
 
         // early return if:
-        // - less than a triad after normalization
+        // - less than a dyad after normalization
         // - one or more pitch is chroma-less
-        if count < 3 || count != gamutCount { return nil }
+        if count < 2 || count != gamutCount { return nil }
 
         let bass = pitchSet[0]
         let bassChromaOpt = bass.chroma
-        var removedBass = pitchSet
-        removedBass.remove(bass)
+        // pitch set with bass removed
+        var bassRemoved = pitchSet
+        bassRemoved.remove(bass)
 
-        // Triads
-        if count == 3 {
-            return _descriptor(pitchSet, qualities: ChordGroup.Triads)
+        // dyads
+        if count == 2 {
+            return _descriptor(pitchSet, qualities: ChordQuality.Dyads)
         }
-        // Tetrads
-        else if count == 4 {
-            let fullDescOpt = _descriptor(pitchSet, qualities: ChordGroup.Tetrads)
-            if let fullDesc = fullDescOpt {
-                return fullDesc
+        // triads
+        else if count == 3 {
+            return _descriptor(pitchSet, qualities: ChordQuality.Triads)
+        }
+        // Tetrads, Pentads, Hexads, Heptads
+        else if count > 3 && count < 8 {
+            var fullQs = [ChordQuality]()
+            var fullUnalteredQs = [ChordQuality]()
+            var slashQs = [ChordQuality]()
+            if count == 4 {
+                fullQs = ChordQuality.Tetrads
+                fullUnalteredQs = ChordQuality.UnalteredTetrads
+                slashQs = ChordQuality.Triads
+            } else if count == 5 {
+                fullQs = ChordQuality.Pentads
+                fullUnalteredQs = ChordQuality.UnalteredPentads
+                slashQs = ChordQuality.Tetrads
+            } else if count == 6 {
+                fullQs = ChordQuality.Hexads
+                fullUnalteredQs = ChordQuality.UnalteredHexads
+                slashQs = ChordQuality.Pentads
+            } else if count == 7 {
+                fullQs = ChordQuality.Heptads
+                fullUnalteredQs = ChordQuality.UnalteredHeptads
+                slashQs = ChordQuality.Hexads
             }
-            // remove bass note and attempt to form slash chord
-            let topDescOpt = _descriptor(removedBass, qualities: ChordGroup.Triads)
-            if let topDesc = topDescOpt {
-                return bassChromaOpt.map {
-                    ChordDescriptor(root: topDesc.root, quality: topDesc.quality, bass: $0)
+            // no-slash
+            let fullOpt = _descriptor(pitchSet, qualities: fullQs)
+            // unaltered, no-slash, root position -> return
+            if let full = fullOpt {
+                if fullUnalteredQs.contains(full.quality) &&
+                    full.bass == full.root {
+                    return full
                 }
             }
-        }
-        // Pentads
-        else if count == 5 {
-            // remove bass note and attempt to form slash chord
-            let topDescOpt = _descriptor(removedBass, qualities: ChordGroup.Tetrads)
-            if let topDesc = topDescOpt {
-                return bassChromaOpt.map {
-                    ChordDescriptor(root: topDesc.root, quality: topDesc.quality, bass: $0)
+            // try to simplify chord by slashing
+            let noBassOpt = _descriptor(bassRemoved, qualities: slashQs)
+            var slashNoBassOpt : ChordDescriptor? = nil
+            if let noBass = noBassOpt {
+                slashNoBassOpt = bassChromaOpt.map {
+                    ChordDescriptor(root: noBass.root, quality: noBass.quality, bass: $0)
                 }
             }
+            return slashNoBassOpt ?? fullOpt
         }
         return nil
     }

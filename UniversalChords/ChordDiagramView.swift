@@ -36,7 +36,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
     var stringConstraints: [NSLayoutConstraint] = []
     var topFret = 0
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -46,23 +46,23 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         self.clipsToBounds = true
         
         fretScroll.clipsToBounds = false
-        fretScroll.setTranslatesAutoresizingMaskIntoConstraints(false)
+        fretScroll.translatesAutoresizingMaskIntoConstraints = false
         fretScroll.delegate = self
         fretScroll.showsHorizontalScrollIndicator = false
         fretScroll.showsVerticalScrollIndicator = false
         
         self.addSubview(fretScroll)
         
-        fretBoard.setTranslatesAutoresizingMaskIntoConstraints(false)
+        fretBoard.translatesAutoresizingMaskIntoConstraints = false
         fretScroll.addSubview(fretBoard)
         
-        stringLabels.setTranslatesAutoresizingMaskIntoConstraints(false)
+        stringLabels.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(stringLabels)
         stringLabels.backgroundColor = UIColor.whiteColor()
         
         let nut = UIView()
         nut.backgroundColor = UIColor.blackColor()
-        nut.setTranslatesAutoresizingMaskIntoConstraints(false)
+        nut.translatesAutoresizingMaskIntoConstraints = false
         fretBoard.addSubview(nut)
         
         self.addConstraints([
@@ -93,15 +93,15 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(0), metrics: [:], views: ["view": fretBoard]))
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(0), metrics: [:], views: ["view": fretBoard]))
         
-        for (i, fretLabel) in enumerate(fretLabels) {
+        for (i, fretLabel) in fretLabels.enumerate() {
             fretBoard.addSubview(fretLabel)
-            fretLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+            fretLabel.translatesAutoresizingMaskIntoConstraints = false
             let offset = CGFloat(i + 1) / CGFloat(fretLabels.count)
             
             let fretView = UIView()
             fretView.backgroundColor = fretColor
             fretLabel.addSubview(fretView)
-            fretView.setTranslatesAutoresizingMaskIntoConstraints(false)
+            fretView.translatesAutoresizingMaskIntoConstraints = false
             
             fretBoard.addConstraints([
                 NSLayoutConstraint(item: fretLabel, attribute: .Right,   relatedBy: .Equal, toItem: fretBoard, attribute: .Left,   multiplier: 1.0,    constant: -30.0),
@@ -129,7 +129,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             sl.removeFromSuperview()
         }
         
-        for (i, string) in enumerate(instrument.strings) {
+        for (i, string) in (instrument.strings).enumerate() {
             let stringContainer = UIView()
             stringContainer.tag = i
             stringViews.append(stringContainer)

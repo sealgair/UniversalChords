@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1F5E1E6DB8D1BAB331E8A714189665A21105A543",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1F5E1E6DB8D1BAB331E8A714189665A21105A543" : 0,
+    "667D2F63578BE4AC3769E6FFF1AE876A7A50DE72" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EB53A606-88B2-4E2B-B2D2-BD6F2719834B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1F5E1E6DB8D1BAB331E8A714189665A21105A543" : "UniversalChords",
+    "667D2F63578BE4AC3769E6FFF1AE876A7A50DE72" : "MusicKit"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "UniversalChords",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "UniversalChords.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sealgair\/UniversalChords.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1F5E1E6DB8D1BAB331E8A714189665A21105A543"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/benzguo\/MusicKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "667D2F63578BE4AC3769E6FFF1AE876A7A50DE72"
+    }
+  ]
+}

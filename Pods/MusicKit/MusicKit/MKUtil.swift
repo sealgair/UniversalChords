@@ -34,12 +34,12 @@ public enum MKUtil {
             }
             newIndices = newIndices + [newIndex]
         }
-        return sorted(newIndices)
+        return newIndices.sort()
     }
 
     /// Converts an array of intervals to semitone indices
     /// e.g. [4, 3] -> [0, 4, 7]
-    static func semitoneIndices(intervals: [Float]) -> [Float] {
+    public static func semitoneIndices(intervals: [Float]) -> [Float] {
         var indices : [Float] = [0]
         for i in 0..<intervals.count {
             let next = indices[i] + intervals[i]
@@ -50,7 +50,7 @@ public enum MKUtil {
 
     /// Converts an array of semitone indices to intervals
     /// e.g. [0, 4, 7] -> [4, 3]
-    static func intervals(semitoneIndices: [Float]) -> [Float] {
+    public static func intervals(semitoneIndices: [Float]) -> [Float] {
         var intervals : [Float] = []
         for i in 1..<semitoneIndices.count {
             let delta = semitoneIndices[i] - semitoneIndices[i-1]
@@ -65,11 +65,11 @@ public enum MKUtil {
     /// first instance of `pitch`. Otherwise, it will point to the location where `pitch`
     /// could be inserted, keeping `pitchSet` in order.
     ///
-    /// :returns: An index in the range `0...count(pitches)` where `pitch` can be inserted.
+    /// - returns: An index in the range `0...count(pitches)` where `pitch` can be inserted.
     static func insertionIndex<C: CollectionType where
         C.Generator.Element == Pitch, C.Index == Int>(pitches: C,_ pitch: Pitch) -> Int
     {
-        if isEmpty(pitches) {
+        if pitches.isEmpty {
             return 0
         }
 

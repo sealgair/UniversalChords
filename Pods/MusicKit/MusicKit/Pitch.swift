@@ -74,7 +74,7 @@ public struct Pitch : Comparable {
 }
 
 // MARK: Printable
-extension Pitch : Printable {
+extension Pitch : CustomStringConvertible {
     public var description : String {
         return (noteName != nil) ? "\(noteName!)" : "\(frequency)Hz"
     }

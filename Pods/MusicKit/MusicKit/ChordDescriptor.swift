@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct ChordDescriptor : Printable {
+public struct ChordDescriptor : CustomStringConvertible {
     /// The root of the chord.
     public let root : Chroma
 

@@ -9,7 +9,7 @@
 import Foundation
 
 
-@objc class ObjectWrapper<T> : NSObject {
+class ObjectWrapper<T> : NSObject {
     var _val: [T]
     
     init(_ v: T) {

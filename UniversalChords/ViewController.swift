@@ -66,20 +66,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         notePicker.delegate = self
         notePicker.dataSource = self
-        notePicker.setTranslatesAutoresizingMaskIntoConstraints(false)
+        notePicker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(notePicker)
         
-        for (i, quality) in enumerate(qualities) {
-            qualityPicker.insertSegmentWithTitle(quality.symbol, atIndex: i, animated: false)
+        for (i, quality) in (qualities).enumerate() {
+            qualityPicker.insertSegmentWithTitle(quality.rawValue, atIndex: i, animated: false)
         }
         qualityPicker.selectedSegmentIndex = 0
-        qualityPicker.setTranslatesAutoresizingMaskIntoConstraints(false)
+        qualityPicker.translatesAutoresizingMaskIntoConstraints = false
         qualityPicker.tintColor = UIColor.blackColor()
         qualityPicker.addTarget(self, action: "chooseChord", forControlEvents: UIControlEvents.ValueChanged)
         qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .Compact
         view.addSubview(qualityPicker)
         
-        chordLabel.font = chordLabel.font.fontWithSize(25)
+        chordLabel.font = chordLabel.font?.fontWithSize(25)
         chordLabel.adjustsFontSizeToFitWidth = true
         chordLabel.textAlignment = .Left
         notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
@@ -89,17 +89,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentPicker.dataSource = self
         
         instrumentLabel.inputView = instrumentPicker
-        instrumentLabel.font = instrumentLabel.font.fontWithSize(18)
+        instrumentLabel.font = instrumentLabel.font?.fontWithSize(18)
         instrumentLabel.textAlignment = .Center
         instrumentPicker.selectRow(1, inComponent: 0, animated: false)
         view.addSubview(instrumentLabel)
         
         view.addSubview(diagram)
-        diagram.setTranslatesAutoresizingMaskIntoConstraints(false)
+        diagram.translatesAutoresizingMaskIntoConstraints = false
         
-        chordLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        diagram.setTranslatesAutoresizingMaskIntoConstraints(false)
-        instrumentLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        chordLabel.translatesAutoresizingMaskIntoConstraints = false
+        diagram.translatesAutoresizingMaskIntoConstraints = false
+        instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints([
             NSLayoutConstraint(item: notePicker, attribute: .Top,    relatedBy: .Equal, toItem: view, attribute: .Top,    multiplier: 1.0, constant: -10.0),
             NSLayoutConstraint(item: notePicker, attribute: .Right,  relatedBy: .Equal, toItem: view, attribute: .Right,  multiplier: 1.0, constant: -10.0),
@@ -137,7 +137,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if quality == .Major {
             chordLabel.text = chroma.flatDescription
         } else {
-            chordLabel.text = "\(chroma.flatDescription) \(quality.symbol)"
+            chordLabel.text = "\(chroma.flatDescription) \(quality.rawValue)"
         }
         chordLabel.resignFirstResponder()
         
@@ -174,7 +174,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func loadState() {
         let defaults = NSUserDefaults.standardUserDefaults()
         if let savedInstrumentName = defaults.objectForKey(kSavedInstrumentName) as? String {
-            for (i, instrument) in enumerate(instruments) {
+            for (i, instrument) in (instruments).enumerate() {
                 if instrument.name == savedInstrumentName {
                     instrumentPicker.selectRow(i, inComponent: 0, animated: false)
                     break
@@ -185,7 +185,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             notePicker.selectRow(chromae.count * circleSize + savedChroma.integerValue, inComponent: 0, animated: false)
         }
         if let savedQuality = defaults.objectForKey(kSavedQuality) as? String {
-            for (i, quality) in enumerate(qualities) {
+            for (i, quality) in (qualities).enumerate() {
                 if quality.description == savedQuality {
                     qualityPicker.selectedSegmentIndex = i
                     break
@@ -210,7 +210,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // Mark: UIPickerViewDelegate
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let componentChoices = choices(pickerView)[component]
         return componentChoices[row % componentChoices.count]
     }
