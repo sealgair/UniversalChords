@@ -28,13 +28,16 @@ struct Instrument {
         return fingerings
     }
     
-    func fingerings(notes: PitchSet) -> [Fingering] {
-        let cacheKey = "\(name):" + notes.map { $0.noteName! }.joinWithSeparator(":")
+    func fingerings(pitchset: PitchSet) -> [Fingering] {
+        let cacheKey = pitchset.description
         if let wrapper = fingerCache.objectForKey(cacheKey) as? ObjectWrapper<[Fingering]> {
             return wrapper.value
         }
         
-        let notes = Set(notes.map {n in n.chroma!})
+        var notes = Set<Chroma>()
+        for note in pitchset {
+            notes.insert(note.chroma!)
+        }
         
         let goodFretsByString: [[Finger]] = strings.map { string in
             let frets = (0...15).filter { i in

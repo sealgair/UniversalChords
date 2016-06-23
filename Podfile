@@ -5,6 +5,6 @@ target 'UniversalChords' do
 
   # Pods for UniversalChords
   pod 'Cartography', '~> 0.6'
-  pod 'MusicKit', :git => 'https://github.com/sealgair/MusicKit.git'
+  pod 'MusicKit', :git => 'https://github.com/benzguo/MusicKit.git'
 
 end
