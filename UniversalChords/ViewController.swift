@@ -8,7 +8,7 @@
 
 import UIKit
 import MusicKit
-
+import Cartography
 
 let kSavedInstrumentName = "kSavedInstrumentName"
 let kSavedChroma = "kSavedChroma"
@@ -98,29 +98,31 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.translatesAutoresizingMaskIntoConstraints = false
         diagram.translatesAutoresizingMaskIntoConstraints = false
         instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
-//        view.addConstraints([
-//            NSLayoutConstraint(item: notePicker, attribute: .Top,    relatedBy: .Equal, toItem: view, attribute: .Top,    multiplier: 1.0, constant: -10.0),
-//            NSLayoutConstraint(item: notePicker, attribute: .Right,  relatedBy: .Equal, toItem: view, attribute: .Right,  multiplier: 1.0, constant: -10.0),
-//            NSLayoutConstraint(item: notePicker, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 10.0),
-//            NSLayoutConstraint(item: notePicker, attribute: .Width,  relatedBy: .Equal, toItem: nil,  attribute: .Width,  multiplier: 1.0, constant: 40.0),
-//            
-//            NSLayoutConstraint(item: diagram, attribute: .Top,    relatedBy: .Equal, toItem: chordLabel,      attribute: .Bottom, multiplier: 1.0, constant: 10.0),
-//            NSLayoutConstraint(item: diagram, attribute: .Left,   relatedBy: .Equal, toItem: view,            attribute: .Left,  multiplier: 1.0, constant: 10.0),
-//            NSLayoutConstraint(item: diagram, attribute: .Right,  relatedBy: .Equal, toItem: notePicker,      attribute: .Left,  multiplier: 1.0, constant: 0.0),
-//            NSLayoutConstraint(item: diagram, attribute: .Bottom, relatedBy: .Equal, toItem: instrumentLabel, attribute: .Top,    multiplier: 1.0, constant: -10.0),
-//            
-//            NSLayoutConstraint(item: chordLabel, attribute: .Top,   relatedBy: .Equal, toItem: view,          attribute: .Top,   multiplier: 1.0, constant: padding),
-//            NSLayoutConstraint(item: chordLabel, attribute: .Width, relatedBy: .Equal, toItem: nil,           attribute: .Width, multiplier: 1.0, constant: 60.0),
-//            NSLayoutConstraint(item: chordLabel, attribute: .Right, relatedBy: .Equal, toItem: view,          attribute: .Right, multiplier: 1.0, constant: -10.0),
-//            
-//            NSLayoutConstraint(item: qualityPicker, attribute: .Top,   relatedBy: .Equal, toItem: view,       attribute: .Top,  multiplier: 1.0, constant: padding),
-//            NSLayoutConstraint(item: qualityPicker, attribute: .Left,  relatedBy: .Equal, toItem: view,       attribute: .Left, multiplier: 1.0, constant: 10.0),
-//            NSLayoutConstraint(item: qualityPicker, attribute: .Right, relatedBy: .Equal, toItem: chordLabel, attribute: .Left, multiplier: 1.0, constant: -10.0),
-//            
-//            NSLayoutConstraint(item: instrumentLabel, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
-//            NSLayoutConstraint(item: instrumentLabel, attribute: .Width,  relatedBy: .Equal, toItem: view, attribute: .Width,  multiplier: 1.0, constant: 0.0),
-//        ])
-//        loadState()
+        constrain(notePicker, diagram, chordLabel, qualityPicker, instrumentLabel) { notePicker, diagram, chordLabel, qualityPicker, instrumentLabel in
+            let view = notePicker.superview!
+            
+            notePicker.top == view.top - 10
+            notePicker.right == view.right - 10
+            notePicker.bottom == view.bottom + 10
+            notePicker.width == 40
+            
+            diagram.top == chordLabel.top + 10
+            diagram.left == view.left + 10
+            diagram.right == notePicker.left
+            diagram.bottom == instrumentLabel.top - 10
+            
+            chordLabel.top == view.top + padding
+            chordLabel.width == 60
+            chordLabel.right == view.right - 10
+            
+            qualityPicker.top == view.top + padding
+            qualityPicker.left == view.left + 10
+            qualityPicker.right == chordLabel.left - 10
+            
+            instrumentLabel.bottom == view.bottom - 10
+            instrumentLabel.width == view.width
+        }
+        loadState()
         self.chooseInstrument()
         self.chooseChord()
     }
