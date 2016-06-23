@@ -1,7 +1,9 @@
 PODS:
-  - MusicKit (0.1.2)
+  - Cartography (0.6.0)
+  - MusicKit (0.2.0)
 
 DEPENDENCIES:
+  - Cartography (~> 0.6)
   - MusicKit (from `https://github.com/sealgair/MusicKit.git`)
 
 EXTERNAL SOURCES:
@@ -10,10 +12,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   MusicKit:
-    :commit: d589078fd77771bb1081e1cf4c3810178d56591f
+    :commit: bdbeb59e3c844a94c20c0fb8512112b80149db35
     :git: https://github.com/sealgair/MusicKit.git
 
 SPEC CHECKSUMS:
-  MusicKit: a97cf4aab12482e3848925ffba21fe438c701248
+  Cartography: 70af183a248547694a8cfaa6b989cb7e04589985
+  MusicKit: 4836bbf66c73c77b9baf85da3d9ce1d0261a1623
 
-COCOAPODS: 0.38.2
+PODFILE CHECKSUM: 1bb470e1ad11c0b74b05311b6d5732d8812a3939
+
+COCOAPODS: 1.0.1

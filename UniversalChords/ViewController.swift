@@ -14,8 +14,6 @@ let kSavedInstrumentName = "kSavedInstrumentName"
 let kSavedChroma = "kSavedChroma"
 let kSavedQuality = "kSavedQuality"
 
-
-
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let chordLabel = UITextField()
@@ -79,27 +77,27 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .Compact
         view.addSubview(qualityPicker)
 
-//        chordLabel.font = chordLabel.font?.fontWithSize(25)
-//        chordLabel.adjustsFontSizeToFitWidth = true
-//        chordLabel.textAlignment = .Left
-//        notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
-//        view.addSubview(chordLabel)
-//        
-//        instrumentPicker.delegate = self
-//        instrumentPicker.dataSource = self
-//        
-//        instrumentLabel.inputView = instrumentPicker
-//        instrumentLabel.font = instrumentLabel.font?.fontWithSize(18)
-//        instrumentLabel.textAlignment = .Center
-//        instrumentPicker.selectRow(1, inComponent: 0, animated: false)
-//        view.addSubview(instrumentLabel)
-//        
-//        view.addSubview(diagram)
-//        diagram.translatesAutoresizingMaskIntoConstraints = false
-//        
-//        chordLabel.translatesAutoresizingMaskIntoConstraints = false
-//        diagram.translatesAutoresizingMaskIntoConstraints = false
-//        instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
+        chordLabel.font = chordLabel.font?.fontWithSize(25)
+        chordLabel.adjustsFontSizeToFitWidth = true
+        chordLabel.textAlignment = .Left
+        notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
+        view.addSubview(chordLabel)
+
+        instrumentPicker.delegate = self
+        instrumentPicker.dataSource = self
+        
+        instrumentLabel.inputView = instrumentPicker
+        instrumentLabel.font = instrumentLabel.font?.fontWithSize(18)
+        instrumentLabel.textAlignment = .Center
+        instrumentPicker.selectRow(1, inComponent: 0, animated: false)
+        view.addSubview(instrumentLabel)
+        
+        view.addSubview(diagram)
+        diagram.translatesAutoresizingMaskIntoConstraints = false
+
+        chordLabel.translatesAutoresizingMaskIntoConstraints = false
+        diagram.translatesAutoresizingMaskIntoConstraints = false
+        instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
 //        view.addConstraints([
 //            NSLayoutConstraint(item: notePicker, attribute: .Top,    relatedBy: .Equal, toItem: view, attribute: .Top,    multiplier: 1.0, constant: -10.0),
 //            NSLayoutConstraint(item: notePicker, attribute: .Right,  relatedBy: .Equal, toItem: view, attribute: .Right,  multiplier: 1.0, constant: -10.0),

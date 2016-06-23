@@ -1,1 +1,0 @@
-MUSICKIT_OTHER_LDFLAGS = -framework "CoreMIDI"

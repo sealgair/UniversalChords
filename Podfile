@@ -1,2 +1,10 @@
-use_frameworks!
-pod 'MusicKit', :git => 'https://github.com/sealgair/MusicKit.git'
+platform :ios, '8.3'
+
+target 'UniversalChords' do
+  use_frameworks!
+
+  # Pods for UniversalChords
+  pod 'Cartography', '~> 0.6'
+  pod 'MusicKit', :git => 'https://github.com/sealgair/MusicKit.git'
+
+end
