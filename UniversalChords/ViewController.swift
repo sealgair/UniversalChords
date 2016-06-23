@@ -106,7 +106,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             notePicker.bottom == view.bottom + 10
             notePicker.width == 40
             
-            diagram.top == chordLabel.top + 10
+            diagram.top == chordLabel.bottom + 10
             diagram.left == view.left + 10
             diagram.right == notePicker.left
             diagram.bottom == instrumentLabel.top - 10
