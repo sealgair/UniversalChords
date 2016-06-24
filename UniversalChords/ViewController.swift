@@ -73,7 +73,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         qualityPicker.selectedSegmentIndex = 0
         qualityPicker.translatesAutoresizingMaskIntoConstraints = false
         qualityPicker.tintColor = UIColor.blackColor()
-        qualityPicker.addTarget(self, action: "chooseChord", forControlEvents: UIControlEvents.ValueChanged)
+        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), forControlEvents: UIControlEvents.ValueChanged)
         qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .Compact
         view.addSubview(qualityPicker)
 
