@@ -51,8 +51,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let instruments = [
         Instrument(name:"Banjo", strings:[.D, .G, .B, .D]),
         Instrument(name:"Guitar", strings:[.E, .A, .D, .G, .B, .E]),
+        Instrument(name:"Drop D Guitar", strings:[.D, .A, .D, .G, .B, .E]),
         Instrument(name:"Mandolin", strings:[.G, .D, .A, .E]),
-        Instrument(name:"Ukulele", strings:[.G, .C, .E, .A]),
+        Instrument(name:"Soprano Ukulele", strings:[.G, .C, .E, .A]),
+        Instrument(name:"Baritone Ukulele", strings:[.D, .G, .B, .E]),
     ]
     var instrument: Instrument!
     
