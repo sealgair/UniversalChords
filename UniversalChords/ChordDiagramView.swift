@@ -32,6 +32,8 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         label.text = String(i + 1)
         return label
     }
+    let fretHeight: CGFloat = 70
+    
     var stringViews: [UIView] = []
     var fingerViews: [UIView] = []
     var stringConstraints: [NSLayoutConstraint] = []
@@ -79,7 +81,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             
             fretBoard.edges == fretScroll.edges
             fretBoard.width == fretScroll.width
-            fretBoard.height == 600
+            fretBoard.height == fretLabels.count * fretHeight
             
             stringLabels.top == fretScroll.top - 50
             stringLabels.left == view.left
@@ -92,7 +94,6 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         for (i, fretLabel) in fretLabels.enumerate() {
             fretBoard.addSubview(fretLabel)
             fretLabel.translatesAutoresizingMaskIntoConstraints = false
-            let offset = CGFloat(i + 1) / CGFloat(fretLabels.count)
             
             let fretView = UIView()
             fretView.backgroundColor = fretColor
@@ -101,7 +102,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             
             constrain(fretLabel, fretView, fretBoard) { fretLabel, fretView, fretBoard in
                 fretLabel.right == fretBoard.left - 30
-                fretLabel.centerY == fretBoard.bottom * offset
+                fretLabel.centerY == fretBoard.top + ((i + 1) * fretHeight)
                 
                 fretView.centerY == fretLabel.centerY
                 fretView.left == fretBoard.left
@@ -175,7 +176,6 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             return
         }
 
-        let fretHeight = fretBoard.frame.height / CGFloat(fretLabels.count)
         var absoluteOffset: CGFloat!
         var newTopFret = 0
         for i in 0..<fretLabels.count {
@@ -230,7 +230,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 fingerViews.append(finger)
                 
                 constrain(finger, fretBoard, stringContainer) { finger, fretBoard, stringContainer in
-                    finger.bottom == fretBoard.bottom * CGFloat(fingerData.position) / CGFloat(fretLabels.count) - 5
+                    finger.bottom == fretBoard.top + (fingerData.position * fretHeight) - 5
                     finger.centerX == stringContainer.centerX
                     finger.width == fingerRadius * 2
                     finger.height == fingerRadius * 2
@@ -248,4 +248,12 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         updateFingers()
     }
+}
+
+func *(left: CGFloat, right: Int) -> CGFloat {
+    return left * CGFloat(right)
+}
+
+func *(left: Int, right: CGFloat) -> CGFloat {
+    return right * left
 }
