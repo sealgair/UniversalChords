@@ -29,7 +29,7 @@ struct Instrument {
     }
     
     func fingerings(pitchset: PitchSet) -> [Fingering] {
-        let cacheKey = pitchset.description
+        let cacheKey = pitchset.description + self.name
         if let wrapper = fingerCache.objectForKey(cacheKey) as? ObjectWrapper<[Fingering]> {
             return wrapper.value
         }
