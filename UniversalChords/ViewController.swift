@@ -129,7 +129,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.chooseChord()
     }
     
-    func chooseChord() {
+    @objc func chooseChord() {
         let chromaIndex = notePicker.selectedRow(inComponent: 0)
         let chroma = chromae[chromaIndex % chromae.count]
         let qualityIndex = qualityPicker.selectedSegmentIndex

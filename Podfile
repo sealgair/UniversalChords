@@ -4,7 +4,7 @@ target 'UniversalChords' do
   use_frameworks!
 
   # Pods for UniversalChords
-  pod 'Cartography', '~> 2.1.0'
+  pod 'Cartography', '~> 3.0.1'
   pod 'MusicKit', :git => 'https://github.com/benzguo/MusicKit.git'
 
 end

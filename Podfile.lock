@@ -1,9 +1,9 @@
 PODS:
-  - Cartography (2.1.0)
+  - Cartography (3.0.1)
   - MusicKit (0.2.0)
 
 DEPENDENCIES:
-  - Cartography (~> 2.1.0)
+  - Cartography (~> 3.0.1)
   - MusicKit (from `https://github.com/benzguo/MusicKit.git`)
 
 SPEC REPOS:
@@ -20,9 +20,9 @@ CHECKOUT OPTIONS:
     :git: https://github.com/benzguo/MusicKit.git
 
 SPEC CHECKSUMS:
-  Cartography: 19c2223a8dfed35d82b098d365213b7ceb25ab2b
+  Cartography: f8c899bb0f5cf20758644a8eea59a75e98a03a5d
   MusicKit: 4836bbf66c73c77b9baf85da3d9ce1d0261a1623
 
-PODFILE CHECKSUM: 0e04523eccee0518195304ede661574f34cac02a
+PODFILE CHECKSUM: fe3bbb87768fb4a286f2d51a609bb2773e3ee63a
 
 COCOAPODS: 1.5.0
