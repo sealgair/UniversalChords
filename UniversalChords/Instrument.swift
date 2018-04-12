@@ -9,13 +9,13 @@
 import UIKit
 import MusicKit
 
-let fingerCache = NSCache()
+let fingerCache = NSCache<AnyObject, AnyObject>()
 
 struct Instrument {
     let name: String
     let strings: [Chroma]
     
-    func nextFingerings(thisString: [Finger], otherStrings: [[Finger]]) -> [Fingering] {
+    func nextFingerings(_ thisString: [Finger], otherStrings: [[Finger]]) -> [Fingering] {
         if otherStrings.count == 0 {
             return thisString.map {f in [f]}
         }
@@ -28,9 +28,9 @@ struct Instrument {
         return fingerings
     }
     
-    func fingerings(pitchset: PitchSet) -> [Fingering] {
+    func fingerings(_ pitchset: PitchSet) -> [Fingering] {
         let cacheKey = pitchset.description + self.name
-        if let wrapper = fingerCache.objectForKey(cacheKey) as? ObjectWrapper<[Fingering]> {
+        if let wrapper = fingerCache.object(forKey: cacheKey as NSString) as? ObjectWrapper<[Fingering]> {
             return wrapper.value
         }
         
@@ -60,7 +60,7 @@ struct Instrument {
             }
             return true
         }
-        fingerCache.setObject(ObjectWrapper(fingerings), forKey: cacheKey)
+        fingerCache.setObject(ObjectWrapper(fingerings), forKey: cacheKey as NSString)
         return fingerings
     }
 }

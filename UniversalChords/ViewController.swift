@@ -49,12 +49,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var chord: PitchSet!
     
     let instruments = [
-        Instrument(name:"Banjo", strings:[.D, .G, .B, .D]),
-        Instrument(name:"Guitar", strings:[.E, .A, .D, .G, .B, .E]),
-        Instrument(name:"Drop D Guitar", strings:[.D, .A, .D, .G, .B, .E]),
-        Instrument(name:"Mandolin", strings:[.G, .D, .A, .E]),
-        Instrument(name:"Soprano Ukulele", strings:[.G, .C, .E, .A]),
-        Instrument(name:"Baritone Ukulele", strings:[.D, .G, .B, .E]),
+        Instrument(name:"Banjo", strings:[.d, .g, .b, .d]),
+        Instrument(name:"Guitar", strings:[.e, .a, .d, .g, .b, .e]),
+        Instrument(name:"Drop D Guitar", strings:[.d, .a, .d, .g, .b, .e]),
+        Instrument(name:"Mandolin", strings:[.g, .d, .a, .e]),
+        Instrument(name:"Soprano Ukulele", strings:[.g, .c, .e, .a]),
+        Instrument(name:"Baritone Ukulele", strings:[.d, .g, .b, .e]),
     ]
     var instrument: Instrument!
     
@@ -69,19 +69,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         notePicker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(notePicker)
         
-        for (i, quality) in (qualities).enumerate() {
-            qualityPicker.insertSegmentWithTitle(quality.rawValue, atIndex: i, animated: false)
+        for (i, quality) in (qualities).enumerated() {
+            qualityPicker.insertSegment(withTitle: quality.rawValue, at: i, animated: false)
         }
         qualityPicker.selectedSegmentIndex = 0
         qualityPicker.translatesAutoresizingMaskIntoConstraints = false
-        qualityPicker.tintColor = UIColor.blackColor()
-        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), forControlEvents: UIControlEvents.ValueChanged)
-        qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .Compact
+        qualityPicker.tintColor = UIColor.black
+        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), for: UIControlEvents.valueChanged)
+        qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .compact
         view.addSubview(qualityPicker)
 
-        chordLabel.font = chordLabel.font?.fontWithSize(25)
+        chordLabel.font = chordLabel.font?.withSize(25)
         chordLabel.adjustsFontSizeToFitWidth = true
-        chordLabel.textAlignment = .Left
+        chordLabel.textAlignment = .left
         notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
         view.addSubview(chordLabel)
 
@@ -89,8 +89,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         instrumentPicker.dataSource = self
         
         instrumentLabel.inputView = instrumentPicker
-        instrumentLabel.font = instrumentLabel.font?.fontWithSize(18)
-        instrumentLabel.textAlignment = .Center
+        instrumentLabel.font = instrumentLabel.font?.withSize(18)
+        instrumentLabel.textAlignment = .center
         instrumentPicker.selectRow(1, inComponent: 0, animated: false)
         view.addSubview(instrumentLabel)
         
@@ -130,7 +130,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func chooseChord() {
-        let chromaIndex = notePicker.selectedRowInComponent(0)
+        let chromaIndex = notePicker.selectedRow(inComponent: 0)
         let chroma = chromae[chromaIndex % chromae.count]
         let qualityIndex = qualityPicker.selectedSegmentIndex
         let quality = qualities[qualityIndex]
@@ -145,22 +145,22 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         diagram.chord = chord(Pitch(chroma: chroma, octave: 1))
         
-        NSUserDefaults.standardUserDefaults().setObject(NSNumber(unsignedLong: chroma.rawValue), forKey: kSavedChroma)
-        NSUserDefaults.standardUserDefaults().setObject(quality.description, forKey: kSavedQuality)
+        UserDefaults.standard.set(NSNumber(value: chroma.rawValue as UInt), forKey: kSavedChroma)
+        UserDefaults.standard.set(quality.description, forKey: kSavedQuality)
     }
     
     func chooseInstrument() {
-        let index = instrumentPicker.selectedRowInComponent(0)
+        let index = instrumentPicker.selectedRow(inComponent: 0)
         instrument = instruments[index]
         instrumentLabel.text = instrument.name
         instrumentLabel.resignFirstResponder()
         
         diagram.instrument = instrument
         
-        NSUserDefaults.standardUserDefaults().setObject(instrument.name, forKey: kSavedInstrumentName)
+        UserDefaults.standard.set(instrument.name, forKey: kSavedInstrumentName)
     }
     
-    func choices(picker:UIPickerView) -> [[String]] {
+    func choices(_ picker:UIPickerView) -> [[String]] {
         switch picker {
         case notePicker:
             return [chromaNames]
@@ -174,20 +174,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     // Mark: NSUserDefaults
     
     func loadState() {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if let savedInstrumentName = defaults.objectForKey(kSavedInstrumentName) as? String {
-            for (i, instrument) in (instruments).enumerate() {
+        let defaults = UserDefaults.standard
+        if let savedInstrumentName = defaults.object(forKey: kSavedInstrumentName) as? String {
+            for (i, instrument) in (instruments).enumerated() {
                 if instrument.name == savedInstrumentName {
                     instrumentPicker.selectRow(i, inComponent: 0, animated: false)
                     break
                 }
             }
         }
-        if let savedChroma = defaults.objectForKey(kSavedChroma) as? NSNumber {
-            notePicker.selectRow(chromae.count * circleSize + savedChroma.integerValue, inComponent: 0, animated: false)
+        if let savedChroma = defaults.object(forKey: kSavedChroma) as? NSNumber {
+            notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)
         }
-        if let savedQuality = defaults.objectForKey(kSavedQuality) as? String {
-            for (i, quality) in (qualities).enumerate() {
+        if let savedQuality = defaults.object(forKey: kSavedQuality) as? String {
+            for (i, quality) in (qualities).enumerated() {
                 if quality.description == savedQuality {
                     qualityPicker.selectedSegmentIndex = i
                     break
@@ -198,11 +198,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // Mark: UIPickerViewDataSource
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return choices(pickerView).count
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         var rows = choices(pickerView)[component].count
         if pickerView == notePicker && component == 0 {
             rows *= 2 * circleSize
@@ -212,12 +212,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // Mark: UIPickerViewDelegate
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let componentChoices = choices(pickerView)[component]
         return componentChoices[row % componentChoices.count]
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == notePicker {
             chooseChord()
             let componentChoices = choices(pickerView)[component]

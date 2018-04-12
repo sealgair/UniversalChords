@@ -14,29 +14,29 @@ extension Chroma {
     var names: [(LetterName, Accidental)] {
         switch self.rawValue {
         case 0:
-            return [(.C, .Natural), (.B, .Sharp), (.D, .DoubleFlat)]
+            return [(.c, .natural), (.b, .sharp), (.d, .doubleFlat)]
         case 1:
-            return [(.C, .Sharp), (.D, .Flat), (.B, .DoubleSharp)]
+            return [(.c, .sharp), (.d, .flat), (.b, .doubleSharp)]
         case 2:
-            return [(.D, .Natural), (.C, .DoubleSharp), (.E, .DoubleFlat)]
+            return [(.d, .natural), (.c, .doubleSharp), (.e, .doubleFlat)]
         case 3:
-            return [(.E, .Flat), (.D, .Sharp), (.F, .DoubleFlat)]
+            return [(.e, .flat), (.d, .sharp), (.f, .doubleFlat)]
         case 4:
-            return [(.E, .Natural), (.F, .Flat), (.D, .DoubleSharp)]
+            return [(.e, .natural), (.f, .flat), (.d, .doubleSharp)]
         case 5:
-            return [(.F, .Natural), (.E, .Sharp), (.G, .DoubleFlat)]
+            return [(.f, .natural), (.e, .sharp), (.g, .doubleFlat)]
         case 6:
-            return [(.F, .Sharp), (.G, .Flat), (.E, .DoubleSharp)]
+            return [(.f, .sharp), (.g, .flat), (.e, .doubleSharp)]
         case 7:
-            return [(.G, .Natural), (.F, .DoubleSharp), (.A, .DoubleFlat)]
+            return [(.g, .natural), (.f, .doubleSharp), (.a, .doubleFlat)]
         case 8:
-            return [(.A, .Flat), (.G, .Sharp)]
+            return [(.a, .flat), (.g, .sharp)]
         case 9:
-            return [(.A, .Natural), (.G, .DoubleSharp), (.B, .DoubleFlat)]
+            return [(.a, .natural), (.g, .doubleSharp), (.b, .doubleFlat)]
         case 10:
-            return [(.B, .Flat), (.A, .Sharp), (.C, .DoubleFlat)]
+            return [(.b, .flat), (.a, .sharp), (.c, .doubleFlat)]
         case 11:
-            return [(.B, .Natural), (.C, .Flat), (.A, .DoubleSharp)]
+            return [(.b, .natural), (.c, .flat), (.a, .doubleSharp)]
         default:
             return []
         }
@@ -44,7 +44,7 @@ extension Chroma {
     
     public var flatDescription : String {
         for (letterName, accidental) in self.names {
-            if accidental == .Natural || accidental == .Flat {
+            if accidental == .natural || accidental == .flat {
                 return describe(letterName, accidental: accidental)
             }
         }
@@ -53,14 +53,14 @@ extension Chroma {
     
     public var sharpDescription : String {
         for (letterName, accidental) in self.names {
-            if accidental == .Natural || accidental == .Sharp {
+            if accidental == .natural || accidental == .sharp {
                 return describe(letterName, accidental: accidental)
             }
         }
         return ""
     }
     
-    func describe(letterName: LetterName, accidental: Accidental) -> String {
+    func describe(_ letterName: LetterName, accidental: Accidental) -> String {
         return "\(letterName.description)\(accidental.description(true))"
     }
 }

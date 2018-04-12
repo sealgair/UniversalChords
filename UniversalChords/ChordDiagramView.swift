@@ -9,10 +9,34 @@
 import UIKit
 import MusicKit
 import Cartography
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ChordDiagramView: UIView, UIScrollViewDelegate {
-    let fretColor = UIColor.orangeColor()
-    let stringColor = UIColor.grayColor()
+    let fretColor = UIColor.orange
+    let stringColor = UIColor.gray
     
     var instrument: Instrument! {
         didSet {
@@ -45,7 +69,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
     
     init() {
         super.init(frame: CGRect())
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
         self.clipsToBounds = true
         
         fretScroll.clipsToBounds = false
@@ -61,10 +85,10 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         
         stringLabels.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(stringLabels)
-        stringLabels.backgroundColor = UIColor.whiteColor()
+        stringLabels.backgroundColor = UIColor.white
         
         let nut = UIView()
-        nut.backgroundColor = UIColor.blackColor()
+        nut.backgroundColor = UIColor.black
         nut.translatesAutoresizingMaskIntoConstraints = false
         fretBoard.addSubview(nut)
         
@@ -91,7 +115,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             fretBoard.edges == fretBoard.superview!.edges
         }
         
-        for (i, fretLabel) in fretLabels.enumerate() {
+        for (i, fretLabel) in fretLabels.enumerated() {
             fretBoard.addSubview(fretLabel)
             fretLabel.translatesAutoresizingMaskIntoConstraints = false
             
@@ -126,14 +150,14 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             sl.removeFromSuperview()
         }
 
-        for (i, string) in (instrument.strings).enumerate() {
+        for (i, string) in (instrument.strings).enumerated() {
             let stringContainer = UIView()
             stringContainer.tag = i
             stringViews.append(stringContainer)
             
             let stringLabel = UILabel()
             stringLabel.text = string.description
-            stringLabel.font = stringLabel.font.fontWithSize(22)
+            stringLabel.font = stringLabel.font.withSize(22)
             stringLabels.addSubview(stringLabel)
             
             let stringView = UIView()
@@ -167,7 +191,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         updateFingers(true)
     }
     
-    func updateFingers(force: Bool = false) {
+    func updateFingers(_ force: Bool = false) {
         if instrument == nil || chord == nil {
             return
         }
@@ -179,7 +203,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         var absoluteOffset: CGFloat!
         var newTopFret = 0
         for i in 0..<fretLabels.count {
-            let fretFrame = self.convertRect(CGRect(x: 0, y: CGFloat(i) * fretHeight, width: 0, height: 0), fromView: fretScroll)
+            let fretFrame = self.convert(CGRect(x: 0, y: CGFloat(i) * fretHeight, width: 0, height: 0), from: fretScroll)
             let fretOffset = fretFrame.maxY - stringLabels.frame.maxY
             if absoluteOffset == nil {
                 absoluteOffset = fretOffset
@@ -220,10 +244,10 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 let fingerRadius: CGFloat = 20.0
                 let finger = UILabel()
                 finger.text = fingerChroma.flatDescription
-                finger.backgroundColor = UIColor.blackColor()
-                finger.textColor = UIColor.whiteColor()
-                finger.textAlignment = .Center
-                finger.font = UIFont.boldSystemFontOfSize(16)
+                finger.backgroundColor = UIColor.black
+                finger.textColor = UIColor.white
+                finger.textAlignment = .center
+                finger.font = UIFont.boldSystemFont(ofSize: 16)
                 finger.layer.cornerRadius = fingerRadius
                 finger.layer.masksToBounds = true
                 stringContainer.addSubview(finger)
@@ -239,13 +263,13 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateFingers()
     }
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         updateFingers()
     }
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updateFingers()
     }
 }
