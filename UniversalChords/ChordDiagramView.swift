@@ -124,14 +124,47 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             fretLabel.addSubview(fretView)
             fretView.translatesAutoresizingMaskIntoConstraints = false
             
-            constrain(fretLabel, fretView, fretBoard) { fretLabel, fretView, fretBoard in
-                fretLabel.right == fretBoard.left - 30
-                fretLabel.centerY == fretBoard.top + ((i + 1) * fretHeight)
+            if (i == 2 || i == 4 || i == 6 || i == 8 || i == 11 || i == 14) {
+                let inlayView = UIView()
+                inlayView.backgroundColor = .black
+                inlayView.layer.cornerRadius = 5
+                fretView.addSubview(inlayView)
+                inlayView.translatesAutoresizingMaskIntoConstraints = false
+                constrain(fretLabel, inlayView) { fretLabel, inlayView in
+                    inlayView.left == fretLabel.right + 12
+                    inlayView.centerY == fretLabel.centerY
+                    inlayView.height == 10
+                    inlayView.width == 10
+                }
                 
-                fretView.centerY == fretLabel.centerY
+                if (i == 11) {
+                    let inlay2 = UIView()
+                    inlay2.backgroundColor = .black
+                    inlay2.layer.cornerRadius = 5
+                    fretView.addSubview(inlay2)
+                    inlay2.translatesAutoresizingMaskIntoConstraints = false
+                    constrain(fretLabel, inlayView, inlay2) { fretLabel, inlayView, inlay2 in
+                        inlay2.centerX == inlayView.centerX
+                        inlay2.top == inlayView.bottom + 5
+                        inlay2.height == inlayView.height
+                        inlay2.width == inlayView.width
+                        inlayView.centerY == fretLabel.centerY - 7
+                    }
+                } else {
+                    constrain(fretLabel, inlayView) { fretLabel, inlayView in
+                        inlayView.centerY == fretLabel.centerY
+                    }
+                }
+            }
+            
+            constrain(fretLabel, fretView, fretBoard) { fretLabel, fretView, fretBoard in
+                fretView.centerY == fretBoard.top + ((i + 1) * fretHeight)
                 fretView.left == fretBoard.left
                 fretView.right == fretBoard.right
                 fretView.height == 3
+                
+                fretLabel.right == fretBoard.left - 30
+                fretLabel.centerY == fretView.centerY - 25
             }
         }
     }
