@@ -96,12 +96,13 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         let nut = UIView()
         nut.backgroundColor = UIColor.black
         nut.translatesAutoresizingMaskIntoConstraints = false
+        nut.layer.cornerRadius = 2
         fretBoard.addSubview(nut)
         
         constrain(self, nut, fretScroll, fretBoard, stringLabels) { view, nut, fretScroll, fretBoard, stringLabels in
             nut.top == fretBoard.top
-            nut.left == fretBoard.left
-            nut.right == fretBoard.right
+            nut.left == fretBoard.left - 8
+            nut.right == fretBoard.right + 8
             nut.height == 5
             
             fretScroll.left == view.left + 50
