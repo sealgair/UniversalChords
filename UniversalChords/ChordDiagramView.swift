@@ -77,6 +77,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         fretScroll.delegate = self
         fretScroll.showsHorizontalScrollIndicator = false
         fretScroll.showsVerticalScrollIndicator = false
+        fretScroll.bounces = false
         
         self.addSubview(fretScroll)
 
