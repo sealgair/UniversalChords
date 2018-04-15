@@ -13,6 +13,7 @@ import Cartography
 let kSavedInstrumentName = "kSavedInstrumentName"
 let kSavedChroma = "kSavedChroma"
 let kSavedQuality = "kSavedQuality"
+let kSavedLefty = "kSavedLefty"
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -24,6 +25,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
     let qualityPicker = UISegmentedControl()
+    let handSwitch = UISwitch()
     
     var chromae: [Chroma] {
         return (0...11).map { i in
@@ -75,7 +77,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         qualityPicker.selectedSegmentIndex = 0
         qualityPicker.translatesAutoresizingMaskIntoConstraints = false
         qualityPicker.tintColor = UIColor.black
-        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), for: UIControlEvents.valueChanged)
+        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), for: .valueChanged)
         qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .compact
         view.addSubview(qualityPicker)
 
@@ -96,11 +98,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         view.addSubview(diagram)
         diagram.translatesAutoresizingMaskIntoConstraints = false
+        
+        handSwitch.translatesAutoresizingMaskIntoConstraints = false
+        handSwitch.onTintColor = handSwitch.tintColor
+        handSwitch.addTarget(self, action: #selector(ViewController.chooseHand), for: .valueChanged)
+        view.addSubview(handSwitch)
 
         chordLabel.translatesAutoresizingMaskIntoConstraints = false
         diagram.translatesAutoresizingMaskIntoConstraints = false
         instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
-        constrain(notePicker, diagram, chordLabel, qualityPicker, instrumentLabel) { notePicker, diagram, chordLabel, qualityPicker, instrumentLabel in
+        constrain(notePicker, diagram, chordLabel, qualityPicker, instrumentLabel, handSwitch) { notePicker, diagram, chordLabel, qualityPicker, instrumentLabel, handSwitch in
             let view = notePicker.superview!
             
             notePicker.top == view.top - 10
@@ -123,9 +130,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
             instrumentLabel.bottom == view.bottom - 10
             instrumentLabel.width == view.width
+            
+            handSwitch.centerX == notePicker.centerX
+            handSwitch.centerY == instrumentLabel.centerY
         }
         loadState()
         self.chooseInstrument()
+        self.chooseHand()
         self.chooseChord()
     }
     
@@ -160,6 +171,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         UserDefaults.standard.set(instrument.name, forKey: kSavedInstrumentName)
     }
     
+    @objc func chooseHand() {
+        let lefty = !handSwitch.isOn
+        diagram.lefty = lefty
+        UserDefaults.standard.set(lefty, forKey: kSavedLefty)
+    }
+    
     func choices(_ picker:UIPickerView) -> [[String]] {
         switch picker {
         case notePicker:
@@ -182,6 +199,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     break
                 }
             }
+        }
+        if let savedLefty = defaults.object(forKey: kSavedLefty) as? Bool {
+            handSwitch.isOn = !savedLefty
         }
         if let savedChroma = defaults.object(forKey: kSavedChroma) as? NSNumber {
             notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)

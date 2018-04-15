@@ -43,6 +43,11 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             updateDiagram()
         }
     }
+    var lefty: Bool = false {
+        didSet {
+            updateDiagram()
+        }
+    }
     var chord: PitchSet! {
         didSet {
             updateDiagram()
@@ -170,6 +175,14 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         }
     }
     
+    func lefted<T>(_ l: [T]) -> [T] {
+        if (self.lefty) {
+            return l.reversed()
+        } else {
+            return l
+        }
+    }
+    
     func updateDiagram() {
         removeConstraints(stringConstraints)
         stringConstraints = []
@@ -184,7 +197,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             sl.removeFromSuperview()
         }
 
-        for (i, string) in (instrument.strings).enumerated() {
+        for (i, string) in lefted(instrument.strings).enumerated() {
             let stringContainer = UIView()
             stringContainer.tag = i
             stringViews.append(stringContainer)
@@ -272,7 +285,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             }
         }
         for stringContainer in stringViews {
-            let fingerData = fingers[stringContainer.tag]
+            let fingerData = lefted(fingers)[stringContainer.tag]
             if fingerData.position > 0 {
                 let fingerChroma = fingerData.note
                 let fingerRadius: CGFloat = 20.0
