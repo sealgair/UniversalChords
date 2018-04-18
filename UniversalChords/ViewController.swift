@@ -44,21 +44,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             .MajorSixth,
             .PowerChord,
             .AddNine,
-            .AddEleven,
+            .Sus2,
+            .Sus4,
         ],
         [
             .Minor,
             .MinorSeventh,
             .MinorSixth,
             .MinorAddNine,
-            .MinorAddEleven,
-        ],
-        [
-            .Sus2,
-            .Sus4,
             .Augmented,
             .Diminished,
-        ]
+        ],
     ]
     lazy var qualityPickers: [UISegmentedControl] = {
         return qualityRows.map {row in UISegmentedControl()}
