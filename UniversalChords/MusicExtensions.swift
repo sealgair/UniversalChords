@@ -64,3 +64,20 @@ extension Chroma {
         return "\(letterName.description)\(accidental.description(true))"
     }
 }
+
+extension ChordQuality {
+    var name: String {
+        switch self {
+        case .Major:
+            return "Major"
+        case .Minor:
+            return "Minor"
+        case .Diminished:
+            return "dim"
+        case .Augmented:
+            return "aug"
+        default:
+            return self.rawValue
+        }
+    }
+}

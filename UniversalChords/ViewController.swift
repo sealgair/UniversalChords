@@ -24,7 +24,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
-    let qualityPicker = UISegmentedControl()
+    let majorQualityPicker = UISegmentedControl()
+    let minorQualityPicker = UISegmentedControl()
+    let altQualityPicker = UISegmentedControl()
+    var qualityPickers: [UISegmentedControl] {
+        return [majorQualityPicker, minorQualityPicker, altQualityPicker]
+    }
     let handSwitch = UISwitch()
     
     var chromae: [Chroma] {
@@ -38,16 +43,35 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    let qualities: [ChordQuality] = [
+    let majorQualities: [ChordQuality] = [
         .Major,
-        .Minor,
         .DominantSeventh,
+        .MajorSixth,
+        .PowerChord,
+        .AddNine,
+        .AddEleven,
+    ]
+    let minorQualities: [ChordQuality] = [
+        .Minor,
         .MinorSeventh,
+        .MinorSixth,
+        .MinorAddNine,
+        .MinorAddEleven,
+    ]
+    let altQualities: [ChordQuality] = [
         .Sus2,
         .Sus4,
         .Augmented,
         .Diminished,
     ]
+    var qualityMaps: [UISegmentedControl: [ChordQuality]] {
+        return [
+            majorQualityPicker: majorQualities,
+            minorQualityPicker: minorQualities,
+            altQualityPicker: altQualities,
+        ]
+    }
+    
     var chord: PitchSet!
     
     let instruments = [
@@ -71,15 +95,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         notePicker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(notePicker)
         
-        for (i, quality) in (qualities).enumerated() {
-            qualityPicker.insertSegment(withTitle: quality.rawValue, at: i, animated: false)
+        for (qualityPicker, qualities) in qualityMaps {
+            for (i, quality) in (qualities).enumerated() {
+                qualityPicker.insertSegment(withTitle: quality.name , at: i, animated: false)
+            }
+            qualityPicker.selectedSegmentIndex = 0
+            qualityPicker.translatesAutoresizingMaskIntoConstraints = false
+            qualityPicker.tintColor = UIColor.black
+            qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord(sender:)), for: .valueChanged)
+            qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .compact
+            view.addSubview(qualityPicker)
         }
-        qualityPicker.selectedSegmentIndex = 0
-        qualityPicker.translatesAutoresizingMaskIntoConstraints = false
-        qualityPicker.tintColor = UIColor.black
-        qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord), for: .valueChanged)
-        qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .compact
-        view.addSubview(qualityPicker)
 
         chordLabel.font = chordLabel.font?.withSize(25)
         chordLabel.adjustsFontSizeToFitWidth = true
@@ -107,7 +133,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.translatesAutoresizingMaskIntoConstraints = false
         diagram.translatesAutoresizingMaskIntoConstraints = false
         instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
-        constrain(notePicker, diagram, chordLabel, qualityPicker, instrumentLabel, handSwitch) { notePicker, diagram, chordLabel, qualityPicker, instrumentLabel, handSwitch in
+        constrain(notePicker, diagram, chordLabel, majorQualityPicker, minorQualityPicker, altQualityPicker, instrumentLabel, handSwitch) { notePicker, diagram, chordLabel, majorQualityPicker, minorQualityPicker, altQualityPicker, instrumentLabel, handSwitch in
             let view = notePicker.superview!
             
             notePicker.top == view.top - 10
@@ -115,18 +141,24 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             notePicker.bottom == view.bottom + 10
             notePicker.width == 40
             
-            diagram.top == chordLabel.bottom + 10
+            chordLabel.top == view.top + padding
+            chordLabel.width == 70
+            chordLabel.right == view.right - 10
+            
+            majorQualityPicker.top == view.top + padding
+            majorQualityPicker.left == view.left + 10
+            majorQualityPicker.right == chordLabel.left - 10
+            minorQualityPicker.top == majorQualityPicker.bottom
+            minorQualityPicker.left == majorQualityPicker.left
+            minorQualityPicker.right == majorQualityPicker.right
+            altQualityPicker.top == minorQualityPicker.bottom
+            altQualityPicker.left == minorQualityPicker.left
+            altQualityPicker.right == minorQualityPicker.right
+            
+            diagram.top == altQualityPicker.bottom + 10
             diagram.left == view.left + 10
             diagram.right == notePicker.left
             diagram.bottom == instrumentLabel.top - 10
-            
-            chordLabel.top == view.top + padding
-            chordLabel.width == 60
-            chordLabel.right == view.right - 10
-            
-            qualityPicker.top == view.top + padding
-            qualityPicker.left == view.left + 10
-            qualityPicker.right == chordLabel.left - 10
             
             instrumentLabel.bottom == view.bottom - 10
             instrumentLabel.width == view.width
@@ -140,12 +172,27 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.chooseChord()
     }
     
-    @objc func chooseChord() {
+    func chooseChord() {
+        for picker in qualityPickers {
+            if picker.selectedSegmentIndex != UISegmentedControlNoSegment {
+                chooseChord(sender:picker)
+                return
+            }
+        }
+    }
+    
+    @objc func chooseChord(sender: UISegmentedControl) {
+        guard let qualities = qualityMaps[sender] else { return }
         let chromaIndex = notePicker.selectedRow(inComponent: 0)
         let chroma = chromae[chromaIndex % chromae.count]
-        let qualityIndex = qualityPicker.selectedSegmentIndex
+        let qualityIndex = sender.selectedSegmentIndex
         let quality = qualities[qualityIndex]
         let chord = Harmony.create(quality.intervals)
+        for qpicker in qualityPickers {
+            if qpicker != sender {
+                qpicker.selectedSegmentIndex = UISegmentedControlNoSegment;
+            }
+        }
         
         if quality == .Major {
             chordLabel.text = chroma.flatDescription
@@ -207,10 +254,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)
         }
         if let savedQuality = defaults.object(forKey: kSavedQuality) as? String {
-            for (i, quality) in (qualities).enumerated() {
-                if quality.description == savedQuality {
-                    qualityPicker.selectedSegmentIndex = i
-                    break
+            for (qualityPicker, qualities) in qualityMaps {
+                for (i, quality) in (qualities).enumerated() {
+                    if quality.description == savedQuality {
+                        qualityPicker.selectedSegmentIndex = i
+                        break
+                    }
                 }
             }
         }
