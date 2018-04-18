@@ -24,12 +24,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
-    let majorQualityPicker = UISegmentedControl()
-    let minorQualityPicker = UISegmentedControl()
-    let altQualityPicker = UISegmentedControl()
-    var qualityPickers: [UISegmentedControl] {
-        return [majorQualityPicker, minorQualityPicker, altQualityPicker]
-    }
     let handSwitch = UISwitch()
     
     var chromae: [Chroma] {
@@ -43,33 +37,34 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    let majorQualities: [ChordQuality] = [
-        .Major,
-        .DominantSeventh,
-        .MajorSixth,
-        .PowerChord,
-        .AddNine,
-        .AddEleven,
-    ]
-    let minorQualities: [ChordQuality] = [
-        .Minor,
-        .MinorSeventh,
-        .MinorSixth,
-        .MinorAddNine,
-        .MinorAddEleven,
-    ]
-    let altQualities: [ChordQuality] = [
-        .Sus2,
-        .Sus4,
-        .Augmented,
-        .Diminished,
-    ]
-    var qualityMaps: [UISegmentedControl: [ChordQuality]] {
-        return [
-            majorQualityPicker: majorQualities,
-            minorQualityPicker: minorQualities,
-            altQualityPicker: altQualities,
+    let qualityRows: [[ChordQuality]] = [
+        [
+            .Major,
+            .DominantSeventh,
+            .MajorSixth,
+            .PowerChord,
+            .AddNine,
+            .AddEleven,
+        ],
+        [
+            .Minor,
+            .MinorSeventh,
+            .MinorSixth,
+            .MinorAddNine,
+            .MinorAddEleven,
+        ],
+        [
+            .Sus2,
+            .Sus4,
+            .Augmented,
+            .Diminished,
         ]
+    ]
+    lazy var qualityPickers: [UISegmentedControl] = {
+        return qualityRows.map {row in UISegmentedControl()}
+    }()
+    var qualityMap: [UISegmentedControl: [ChordQuality]] {
+        return Dictionary(uniqueKeysWithValues: zip(qualityPickers, qualityRows))
     }
     
     var chord: PitchSet!
@@ -95,8 +90,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         notePicker.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(notePicker)
         
-        for (qualityPicker, qualities) in qualityMaps {
-            for (i, quality) in (qualities).enumerated() {
+        for qualityPicker in qualityPickers {
+            let qualities = qualityMap[qualityPicker]!
+            for (i, quality) in qualities.enumerated() {
                 qualityPicker.insertSegment(withTitle: quality.name , at: i, animated: false)
             }
             qualityPicker.selectedSegmentIndex = 0
@@ -133,7 +129,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.translatesAutoresizingMaskIntoConstraints = false
         diagram.translatesAutoresizingMaskIntoConstraints = false
         instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
-        constrain(notePicker, diagram, chordLabel, majorQualityPicker, minorQualityPicker, altQualityPicker, instrumentLabel, handSwitch) { notePicker, diagram, chordLabel, majorQualityPicker, minorQualityPicker, altQualityPicker, instrumentLabel, handSwitch in
+        let firstQPick = qualityPickers[0]
+        constrain(notePicker, diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, handSwitch) { notePicker, diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, handSwitch in
             let view = notePicker.superview!
             
             notePicker.top == view.top - 10
@@ -145,17 +142,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             chordLabel.width == 70
             chordLabel.right == view.right - 10
             
-            majorQualityPicker.top == view.top + padding
-            majorQualityPicker.left == view.left + 10
-            majorQualityPicker.right == chordLabel.left - 10
-            minorQualityPicker.top == majorQualityPicker.bottom
-            minorQualityPicker.left == majorQualityPicker.left
-            minorQualityPicker.right == majorQualityPicker.right
-            altQualityPicker.top == minorQualityPicker.bottom
-            altQualityPicker.left == minorQualityPicker.left
-            altQualityPicker.right == minorQualityPicker.right
+            firstQPick.top == view.top + padding
+            firstQPick.left == view.left + 10
+            firstQPick.right == chordLabel.left - 10
             
-            diagram.top == altQualityPicker.bottom + 10
+            diagram.top == lastQPick.bottom + 10
             diagram.left == view.left + 10
             diagram.right == notePicker.left
             diagram.bottom == instrumentLabel.top - 10
@@ -166,6 +157,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             handSwitch.centerX == notePicker.centerX
             handSwitch.centerY == instrumentLabel.centerY
         }
+        
+        constrain(qualityPickers) { qualityPickers in
+            distribute(by: 0, vertically: qualityPickers)
+            align(leading: qualityPickers)
+            align(trailing: qualityPickers)
+        }
+        
         loadState()
         self.chooseInstrument()
         self.chooseHand()
@@ -182,7 +180,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     @objc func chooseChord(sender: UISegmentedControl) {
-        guard let qualities = qualityMaps[sender] else { return }
+        guard let qualities = qualityMap[sender] else { return }
         let chromaIndex = notePicker.selectedRow(inComponent: 0)
         let chroma = chromae[chromaIndex % chromae.count]
         let qualityIndex = sender.selectedSegmentIndex
@@ -254,7 +252,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)
         }
         if let savedQuality = defaults.object(forKey: kSavedQuality) as? String {
-            for (qualityPicker, qualities) in qualityMaps {
+            for (qualityPicker, qualities) in qualityMap {
                 for (i, quality) in (qualities).enumerated() {
                     if quality.description == savedQuality {
                         qualityPicker.selectedSegmentIndex = i
