@@ -30,30 +30,19 @@ class SettingsViewController: UITableViewController {
         handLabel.translatesAutoresizingMaskIntoConstraints = false
         handCell.addSubview(handLabel)
         
-        let leftLabel = UILabel()
-        leftLabel.text = "lefty"
-        leftLabel.translatesAutoresizingMaskIntoConstraints = false
-        handCell.addSubview(leftLabel)
-        
-        let rightLabel = UILabel()
-        rightLabel.text = "righty"
-        rightLabel.translatesAutoresizingMaskIntoConstraints = false
-        handCell.addSubview(rightLabel)
-        
-        let handSwitch = UISwitch()
-        handSwitch.translatesAutoresizingMaskIntoConstraints = false
+        let handPicker = UISegmentedControl(items: ["lefty", "righty"])
+        handPicker.translatesAutoresizingMaskIntoConstraints = false
+        handPicker.tintColor = .black
         let lefty = UserDefaults.standard.bool(forKey: kSavedLefty)
-        handSwitch.isOn = !lefty
-        handSwitch.addTarget(self, action: #selector(chooseHand(sender:)), for: .valueChanged)
-        handCell.addSubview(handSwitch)
+        handPicker.selectedSegmentIndex = lefty ? 0 : 1
+        handPicker.addTarget(self, action: #selector(chooseHand(sender:)), for: .valueChanged)
+        handCell.addSubview(handPicker)
         
-        constrain(handCell.contentView, handLabel, leftLabel, rightLabel, handSwitch) { cell, handLabel, leftLabel, rightLabel, handSwitch in
+        constrain(handCell.contentView, handLabel, handPicker) { cell, handLabel, handPicker in
             handLabel.leading == cell.leading + 10
-            handSwitch.centerX == cell.centerX
-            leftLabel.right == handSwitch.left - 10
-            rightLabel.left == handSwitch.right + 10
+            handPicker.leading == handLabel.trailing + 10
             
-            align(centerY: cell, handLabel, leftLabel, rightLabel, handSwitch)
+            align(centerY: cell, handLabel, handPicker)
             cell.edges == cell.superview!.edges
         }
     }
@@ -71,8 +60,8 @@ class SettingsViewController: UITableViewController {
         return cell
     }
     
-    @objc func chooseHand(sender: UISwitch) {
-        UserDefaults.standard.set(!sender.isOn, forKey: kSavedLefty)
+    @objc func chooseHand(sender: UISegmentedControl) {
+        UserDefaults.standard.set(sender.selectedSegmentIndex == 0, forKey: kSavedLefty)
         if let delegate = delegate {
             delegate.chooseHand()
         }
