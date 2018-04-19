@@ -139,7 +139,6 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 inlayView.translatesAutoresizingMaskIntoConstraints = false
                 constrain(fretLabel, inlayView) { fretLabel, inlayView in
                     inlayView.left == fretLabel.right + 12
-                    inlayView.centerY == fretLabel.centerY
                     inlayView.height == 10
                     inlayView.width == 10
                 }

@@ -15,7 +15,7 @@ let kSavedChroma = "kSavedChroma"
 let kSavedQuality = "kSavedQuality"
 let kSavedLefty = "kSavedLefty"
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, SettingsDelegate {
     
     let chordLabel = UITextField()
     let notePicker = UIPickerView()
@@ -24,7 +24,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
-    let handSwitch = UISwitch()
+    let settingsButton = UIButton(type: .infoDark)
     
     var chromae: [Chroma] {
         return (0...11).map { i in
@@ -117,16 +117,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         view.addSubview(diagram)
         diagram.translatesAutoresizingMaskIntoConstraints = false
         
-        handSwitch.translatesAutoresizingMaskIntoConstraints = false
-        handSwitch.onTintColor = handSwitch.tintColor
-        handSwitch.addTarget(self, action: #selector(ViewController.chooseHand), for: .valueChanged)
-        view.addSubview(handSwitch)
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.tintColor = .black
+        settingsButton.addTarget(self, action: #selector(openSettings), for: .touchUpInside)
+        view.addSubview(settingsButton)
 
         chordLabel.translatesAutoresizingMaskIntoConstraints = false
         diagram.translatesAutoresizingMaskIntoConstraints = false
         instrumentLabel.translatesAutoresizingMaskIntoConstraints = false
         let firstQPick = qualityPickers[0]
-        constrain(notePicker, diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, handSwitch) { notePicker, diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, handSwitch in
+        constrain(notePicker, diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, settingsButton) { notePicker, diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, settingsButton in
             let view = notePicker.superview!
             
             notePicker.top == view.top - 10
@@ -150,8 +150,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             instrumentLabel.bottom == view.bottom - 10
             instrumentLabel.width == view.width
             
-            handSwitch.centerX == notePicker.centerX
-            handSwitch.centerY == instrumentLabel.centerY
+            settingsButton.centerX == notePicker.centerX
+            settingsButton.centerY == instrumentLabel.centerY
         }
         
         constrain(qualityPickers) { qualityPickers in
@@ -213,9 +213,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     @objc func chooseHand() {
-        let lefty = !handSwitch.isOn
+        let lefty = UserDefaults.standard.bool(forKey: kSavedLefty)
         diagram.lefty = lefty
-        UserDefaults.standard.set(lefty, forKey: kSavedLefty)
     }
     
     func choices(_ picker:UIPickerView) -> [[String]] {
@@ -229,6 +228,21 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    @objc func openSettings() {
+        let settingsVC = SettingsViewController(style: .grouped)
+        settingsVC.title = "Settings"
+        settingsVC.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(closeSettings))
+        settingsVC.delegate = self
+        
+        let settingsNav = UINavigationController(rootViewController: settingsVC)
+        settingsNav.modalPresentationStyle = .popover
+        present(settingsNav, animated: true)
+    }
+    
+    @objc func closeSettings() {
+        self.dismiss(animated: true)
+    }
+    
     // Mark: NSUserDefaults
     
     func loadState() {
@@ -240,9 +254,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     break
                 }
             }
-        }
-        if let savedLefty = defaults.object(forKey: kSavedLefty) as? Bool {
-            handSwitch.isOn = !savedLefty
         }
         if let savedChroma = defaults.object(forKey: kSavedChroma) as? NSNumber {
             notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)
