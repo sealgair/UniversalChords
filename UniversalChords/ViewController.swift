@@ -18,14 +18,10 @@ let kSavedLefty = "kSavedLefty"
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, SettingsDelegate {
     
     let chordLabel = UITextField()
-    let notePicker = UIPickerView()
-    
     let diagram = ChordDiagramView()
-    
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
     let settingsButton = UIButton(type: .infoDark)
-    
     let sideConstraintGroup = ConstraintGroup()
     
     var chromae: [Chroma] {
@@ -38,7 +34,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             chroma.flatDescription
         }
     }
-    
+    lazy var noteButtons: [UIButton] = {
+        return chromae.map { chroma in
+            UIButton()
+        }
+    }()
+
     var lefty: Bool {
         return UserDefaults.standard.bool(forKey: kSavedLefty)
     }
@@ -87,11 +88,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        notePicker.delegate = self
-        notePicker.dataSource = self
-        notePicker.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(notePicker)
-        
         for qualityPicker in qualityPickers {
             let qualities = qualityMap[qualityPicker]!
             for (i, quality) in qualities.enumerated() {
@@ -100,7 +96,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             qualityPicker.selectedSegmentIndex = 0
             qualityPicker.translatesAutoresizingMaskIntoConstraints = false
             qualityPicker.tintColor = UIColor.black
-            qualityPicker.addTarget(self, action: #selector(ViewController.chooseChord(sender:)), for: .valueChanged)
+            qualityPicker.addTarget(self, action: #selector(chooseChordQuality(sender:)), for: .valueChanged)
             qualityPicker.apportionsSegmentWidthsByContent = self.traitCollection.horizontalSizeClass == .compact
             view.addSubview(qualityPicker)
         }
@@ -108,8 +104,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         chordLabel.font = chordLabel.font?.withSize(32)
         chordLabel.adjustsFontSizeToFitWidth = true
         chordLabel.textAlignment = .center
-        notePicker.selectRow(chromae.count * circleSize, inComponent: 0, animated: false)
         view.addSubview(chordLabel)
+        
+        for (chroma, button) in zip(chromae, noteButtons) {
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setTitleColor(.black, for: .normal)
+            button.setTitle(chroma.flatDescription, for: .normal)
+            button.addTarget(self, action: #selector(chooseChroma(sender:)), for: .touchUpInside)
+            view.addSubview(button)
+        }
 
         instrumentPicker.delegate = self
         instrumentPicker.dataSource = self
@@ -144,6 +147,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         }
         
+        let nbh = noteButtons[0].sizeThatFits(UIScreen.main.bounds.size).height
+        let nbw = noteButtons.map { b in b.sizeThatFits(UIScreen.main.bounds.size).width }.max()!
+        constrain(noteButtons) { noteButtons in
+            distribute(by: 10, vertically: noteButtons)
+            align(leading: noteButtons)
+            align(trailing: noteButtons)
+            for b in noteButtons {
+                b.height == nbh
+                b.width == nbw
+            }
+        }
+        
         loadState()
         self.chooseInstrument()
         self.chooseHand()
@@ -152,13 +167,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func constrainToSide() {
         let firstQPick = qualityPickers[0]
+        let firstNote = noteButtons[0]
         
         let ilh = instrumentLabel.sizeThatFits(UIScreen.main.bounds.size).height
         
-        constrain(notePicker, diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, settingsButton, replace: sideConstraintGroup) {
-            notePicker, diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, settingsButton in
+        constrain(diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, settingsButton, firstNote, replace: sideConstraintGroup) {
+            diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, settingsButton, firstNote in
             
-            let view = notePicker.superview!
+            let view = diagram.superview!
             
             chordLabel.top == view.top + padding
             chordLabel.width == 60
@@ -172,53 +188,58 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
             diagram.top == lastQPick.bottom + 5
             diagram.bottom == instrumentLabel.top - 10
+            firstNote.top == diagram.top
             
-            notePicker.centerY == diagram.centerY
-            notePicker.height == diagram.height
-            notePicker.width == 40
-            
-            settingsButton.centerX == notePicker.centerX
             settingsButton.centerY == instrumentLabel.centerY
             
             if lefty {
-                notePicker.left == view.left + 10
                 chordLabel.left == view.left + 10
                 firstQPick.right == view.right - 10
                 firstQPick.left == chordLabel.right + 5
+                firstNote.left == view.left + 10
+                diagram.left == firstNote.right + 10
                 diagram.right == view.right - 10
-                diagram.left == notePicker.right
+                settingsButton.left == view.left + 10
             } else {
-                notePicker.right == view.right - 10
                 chordLabel.right == view.right - 10
                 firstQPick.left == view.left + 10
                 firstQPick.right == chordLabel.left - 5
+                firstNote.right == view.right - 10
+                diagram.right == firstNote.left - 10
                 diagram.left == view.left + 10
-                diagram.right == notePicker.left
+                settingsButton.right == view.right - 10
             }
         }
     }
     
-    func chooseChord() {
-        for picker in qualityPickers {
-            if picker.selectedSegmentIndex != UISegmentedControlNoSegment {
-                chooseChord(sender:picker)
-                return
-            }
-        }
+    @objc func chooseChroma(sender: UIButton) {
+        let _ = noteButtons.map { button in button.isSelected = false }
+        sender.isSelected = true
+        chooseChord()
     }
     
-    @objc func chooseChord(sender: UISegmentedControl) {
-        guard let qualities = qualityMap[sender] else { return }
-        let chromaIndex = notePicker.selectedRow(inComponent: 0)
-        let chroma = chromae[chromaIndex % chromae.count]
-        let qualityIndex = sender.selectedSegmentIndex
-        let quality = qualities[qualityIndex]
-        let chord = Harmony.create(quality.intervals)
+    @objc func chooseChordQuality(sender: UISegmentedControl) {
         for qpicker in qualityPickers {
             if qpicker != sender {
                 qpicker.selectedSegmentIndex = UISegmentedControlNoSegment;
             }
         }
+        chooseChord()
+    }
+    
+    func chooseChord() {
+        let chromaIndex = noteButtons.index { button in button.isSelected } ?? 0
+        let chroma = chromae[chromaIndex]
+        
+        let picker = qualityPickers.first { picker in picker.selectedSegmentIndex != UISegmentedControlNoSegment }
+        let quality: ChordQuality
+        if let picker = picker, let qualities = qualityMap[picker] {
+            quality = qualities[picker.selectedSegmentIndex]
+        } else {
+            quality = .Major
+        }
+        
+        let chord = Harmony.create(quality.intervals)
         
         if quality == .Major {
             chordLabel.text = chroma.flatDescription
@@ -251,8 +272,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func choices(_ picker:UIPickerView) -> [[String]] {
         switch picker {
-        case notePicker:
-            return [chromaNames]
         case instrumentPicker:
             return [instruments.map {i in i.name}]
         default:
@@ -288,7 +307,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         }
         if let savedChroma = defaults.object(forKey: kSavedChroma) as? NSNumber {
-            notePicker.selectRow(chromae.count * circleSize + savedChroma.intValue, inComponent: 0, animated: false)
+            let chromaIndex = chromae.index(of: Chroma(rawValue: savedChroma.uintValue) ?? .a) ?? 0
+            let _ = noteButtons.map { button in button.isSelected = false }
+            noteButtons[chromaIndex].isSelected = true
         }
         if let savedQuality = defaults.object(forKey: kSavedQuality) as? String {
             for (qualityPicker, qualities) in qualityMap {
@@ -309,11 +330,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        var rows = choices(pickerView)[component].count
-        if pickerView == notePicker && component == 0 {
-            rows *= 2 * circleSize
-        }
-        return rows
+        return choices(pickerView)[component].count
     }
     
     // Mark: UIPickerViewDelegate
@@ -324,11 +341,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView == notePicker {
-            chooseChord()
-            let componentChoices = choices(pickerView)[component]
-            pickerView.selectRow(row % componentChoices.count + circleSize * componentChoices.count, inComponent: component, animated: false)
-        } else if pickerView == instrumentPicker {
+        if pickerView == instrumentPicker {
             chooseInstrument()
         }
     }
