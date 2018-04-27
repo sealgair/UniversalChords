@@ -62,6 +62,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         return label
     }
     let fretHeight: CGFloat = 70
+    let stringLabelHeight: CGFloat = 50
     
     var stringViews: [UIView] = []
     var fingerViews: [UIView] = []
@@ -106,7 +107,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             nut.height == 5
             
             fretScroll.left == view.left + 50
-            fretScroll.top == view.top + 50
+            fretScroll.top == view.top + stringLabelHeight
             fretScroll.right == view.right - 20
             fretScroll.bottom == view.bottom - 10
             
@@ -114,7 +115,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             fretBoard.width == fretScroll.width
             fretBoard.height == fretLabels.count * fretHeight
             
-            stringLabels.top == fretScroll.top - 50
+            stringLabels.top == fretScroll.top - stringLabelHeight
             stringLabels.left == view.left
             stringLabels.right == view.right
             stringLabels.bottom == fretScroll.top
