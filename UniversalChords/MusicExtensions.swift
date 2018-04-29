@@ -42,6 +42,11 @@ extension Chroma {
         }
     }
     
+    public var isNatural: Bool {
+        let (_, accidental) = self.names[0]
+        return accidental == .natural
+    }
+    
     public var flatDescription : String {
         for (letterName, accidental) in self.names {
             if accidental == .natural || accidental == .flat {

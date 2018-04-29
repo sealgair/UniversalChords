@@ -39,6 +39,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             UIButton()
         }
     }()
+    let notePicker = UIView()
 
     var lefty: Bool {
         return UserDefaults.standard.bool(forKey: kSavedLefty)
@@ -119,27 +120,44 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         for (chroma, button) in zip(chromae, noteButtons) {
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setTitleColor(.black, for: .normal)
+            button.setBackgroundColor(.black, for: .selected)
+            button.setTitleColor(.white, for: .selected)
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.borderWidth = 2
+            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
             button.setTitle(chroma.flatDescription, for: .normal)
             button.addTarget(self, action: #selector(chooseChroma(sender:)), for: .touchUpInside)
             if let label = button.titleLabel {
-                label.font = label.font.withSize(label.font.pointSize * 1.5)
+                label.font = label.font.withSize(label.font.pointSize * 1.25)
             }
             button.contentHorizontalAlignment = .left
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-            button.layer.borderColor = UIColor.black.cgColor
-            button.layer.borderWidth = 2
-            view.addSubview(button)
+            notePicker.addSubview(button)
         }
-        
-        let nbw = noteButtons.map { b in b.sizeThatFits(UIScreen.main.bounds.size).width * 1.25 }.max()!
-        constrain(noteButtons) { noteButtons in
-            distribute(by: -2, vertically: noteButtons)
-            align(leading: noteButtons)
-            align(trailing: noteButtons)
-            for b in noteButtons {
-                b.height == noteButtons[0].height
-                b.width == nbw
+        for (chroma, button) in zip(chromae, noteButtons) {
+            if !chroma.isNatural {
+                notePicker.bringSubview(toFront: button)
             }
+        }
+        view.addSubview(notePicker)
+        
+        let nbw = noteButtons.map { b in b.titleLabel!.sizeThatFits(UIScreen.main.bounds.size).width }.max()! + 20
+        let nbh = noteButtons[0].sizeThatFits(UIScreen.main.bounds.size).height * 1.5
+        constrain(noteButtons) { noteButtons in
+            let notePicker = noteButtons[0].superview!
+            notePicker.width == nbw
+            var prev: ViewProxy?
+            for button in noteButtons {
+                if let prev = prev {
+                    button.top == prev.bottom - 2
+                } else {
+                    button.top == notePicker.top
+                }
+                button.height == nbh
+                button.left == notePicker.left
+                button.right == notePicker.right
+                prev = button
+            }
+            notePicker.bottom == prev!.bottom
         }
 
         instrumentPicker.delegate = self
@@ -173,13 +191,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func constrainToSide() {
         let firstQPick = qualityPickers[0]
-        let firstNote = noteButtons[0]
         
         let ilh = instrumentLabel.sizeThatFits(UIScreen.main.bounds.size).height
+        let diagramOffset = diagram.stringLabelHeight
         
-        let diagramHead = diagram.stringLabelHeight
-        constrain(diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, settingsButton, firstNote, replace: sideConstraintGroup) {
-            diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, settingsButton, firstNote in
+        constrain(diagram, firstQPick, qualityPickers.last!, chordLabel, instrumentLabel, settingsButton, notePicker, replace: sideConstraintGroup) {
+            diagram, firstQPick, lastQPick, chordLabel, instrumentLabel, settingsButton, notePicker in
             
             let view = diagram.superview!
             
@@ -195,26 +212,24 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
             diagram.top == lastQPick.bottom + 5
             diagram.bottom == instrumentLabel.top - 10
-            firstNote.top == diagram.top + diagramHead
+            notePicker.centerY == diagram.centerY + (diagramOffset/2)
             
             settingsButton.centerY == instrumentLabel.centerY
-            
-            firstNote.height == (diagram.height - diagramHead) / CGFloat(chromae.count)
             
             if lefty {
                 chordLabel.left == view.left + 10
                 firstQPick.right == view.right - 10
                 firstQPick.left == chordLabel.right + 5
-                firstNote.left == view.left - 2
-                diagram.left == firstNote.right + 10
+                notePicker.left == view.left - 2
+                diagram.left == notePicker.right + 10
                 diagram.right == view.right - 10
                 settingsButton.left == view.left + 10
             } else {
                 chordLabel.right == view.right - 10
                 firstQPick.left == view.left + 10
                 firstQPick.right == chordLabel.left - 5
-                firstNote.right == view.right + 2
-                diagram.right == firstNote.left - 10
+                notePicker.right == view.right + 2
+                diagram.right == notePicker.left - 10
                 diagram.left == view.left + 10
                 settingsButton.right == view.right - 10
             }
