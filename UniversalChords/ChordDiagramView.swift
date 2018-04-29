@@ -63,7 +63,9 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
     }
     var fretInlays = [UILabel: UIView]()
     let fretHeight: CGFloat = 70
-    let stringLabelHeight: CGFloat = 50
+    var stringLabelHeight: CGFloat {
+       return stringLabels.frame.height
+    }
     
     var stringViews: [UIView] = []
     var fingerViews: [UIView] = []
@@ -109,20 +111,21 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             nut.right == fretBoard.right + 8
             nut.height == 5
             
-            fretScroll.top == view.top + stringLabelHeight
-            fretScroll.bottom == view.bottom - 10
-            
             fretBoard.edges == fretScroll.edges
             fretBoard.width == fretScroll.width
             fretBoard.height == fretLabels.count * fretHeight
             
-            stringLabels.top == fretScroll.top - stringLabelHeight
+            stringLabels.top == view.top
             stringLabels.left == view.left
             stringLabels.right == view.right
-            stringLabels.bottom == fretScroll.top
+            
+            fretScroll.top == stringLabels.bottom
+            fretScroll.bottom == view.bottom - 10
             
             fretBoard.edges == fretBoard.superview!.edges
         }
+        
+        var slh: CGFloat!
         
         for (i, fretLabel) in fretLabels.enumerated() {
             fretBoard.addSubview(fretLabel)
@@ -132,6 +135,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             fretView.backgroundColor = fretColor
             fretLabel.addSubview(fretView)
             fretView.translatesAutoresizingMaskIntoConstraints = false
+            slh = fretLabel.sizeThatFits(self.bounds.size).height
             
             if (i == 2 || i == 4 || i == 6 || i == 8 || i == 11 || i == 14) {
                 let inlayView = UIView()
@@ -173,6 +177,9 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 
                 fretLabel.centerY == fretView.centerY - 25
             }
+        }
+        constrain(stringLabels) { stringLabels in
+            stringLabels.height == slh + 5
         }
     }
     
