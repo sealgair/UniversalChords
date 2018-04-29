@@ -61,13 +61,16 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         label.text = String(i + 1)
         return label
     }
+    var fretInlays = [UILabel: UIView]()
     let fretHeight: CGFloat = 70
     let stringLabelHeight: CGFloat = 50
     
     var stringViews: [UIView] = []
     var fingerViews: [UIView] = []
-    var stringConstraints: [NSLayoutConstraint] = []
     var topFret = 0
+    
+    var leftyConstraintGroups = [AnyHashable: ConstraintGroup]()
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -106,9 +109,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             nut.right == fretBoard.right + 8
             nut.height == 5
             
-            fretScroll.left == view.left + 50
             fretScroll.top == view.top + stringLabelHeight
-            fretScroll.right == view.right - 20
             fretScroll.bottom == view.bottom - 10
             
             fretBoard.edges == fretScroll.edges
@@ -137,9 +138,9 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 inlayView.backgroundColor = .black
                 inlayView.layer.cornerRadius = 5
                 fretView.addSubview(inlayView)
+                fretInlays[fretLabel] = inlayView
                 inlayView.translatesAutoresizingMaskIntoConstraints = false
-                constrain(fretLabel, inlayView) { fretLabel, inlayView in
-                    inlayView.left == fretLabel.right + 12
+                constrain(inlayView) { inlayView in
                     inlayView.height == 10
                     inlayView.width == 10
                 }
@@ -170,7 +171,6 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 fretView.right == fretBoard.right
                 fretView.height == 3
                 
-                fretLabel.right == fretBoard.left - 30
                 fretLabel.centerY == fretView.centerY - 25
             }
         }
@@ -184,9 +184,17 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         }
     }
     
+    func leftyConstraintGroup(_ name: AnyHashable) -> ConstraintGroup {
+        if let cg = leftyConstraintGroups[name]  {
+            return cg
+        } else {
+            let cg = ConstraintGroup()
+            leftyConstraintGroups[name] = cg
+            return cg
+        }
+    }
+    
     func updateDiagram() {
-        removeConstraints(stringConstraints)
-        stringConstraints = []
         let _ = stringViews.map { v in v.removeFromSuperview() }
         stringViews = []
         
@@ -196,6 +204,16 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
         
         for sl in stringLabels.subviews {
             sl.removeFromSuperview()
+        }
+        
+        constrain(self, fretScroll, replace: leftyConstraintGroup(fretScroll)) { view, fretScroll in
+            if lefty {
+                fretScroll.left == view.left + 20
+                fretScroll.right == view.right - 50
+            } else {
+                fretScroll.left == view.left + 50
+                fretScroll.right == view.right - 20
+            }
         }
 
         for (i, string) in lefted(instrument.strings).enumerated() {
@@ -214,7 +232,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
             
             fretBoard.addSubview(stringContainer)
             
-            constrain(fretBoard, stringContainer, stringLabel, stringLabels, stringView) { fretBoard, stringContainer, stringLabel, stringLabels, stringView in
+            constrain(fretBoard, stringContainer, stringLabel, stringLabels, stringView, replace: leftyConstraintGroup(stringLabel)) { fretBoard, stringContainer, stringLabel, stringLabels, stringView in
                 let offset = CGFloat(i) / CGFloat(instrument.strings.count - 1)
                 if offset == 0 {
                     stringContainer.left == fretBoard.left
@@ -233,9 +251,27 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 stringView.width == 4
                 stringView.centerX == stringContainer.centerX
             }
-            
-            self.addConstraints(stringConstraints)
         }
+        
+        for fretLabel  in fretLabels {
+            constrain(fretBoard, fretLabel, replace: leftyConstraintGroup(fretLabel)) { fretBoard, fretLabel in
+                if self.lefty {
+                    fretLabel.left == fretBoard.right + 30
+                } else {
+                    fretLabel.right == fretBoard.left - 30
+                }
+            }
+            if let inlay = fretInlays[fretLabel] {
+                constrain(inlay, fretLabel, replace: leftyConstraintGroup(inlay)) { inlayView, fretLabel in
+                    if self.lefty {
+                        inlayView.right == fretLabel.left - 12
+                    } else {
+                        inlayView.left == fretLabel.right + 12
+                    }
+                }
+            }
+        }
+        
         updateFingers(true)
     }
     
@@ -301,7 +337,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 stringContainer.addSubview(finger)
                 fingerViews.append(finger)
                 
-                constrain(finger, fretBoard, stringContainer) { finger, fretBoard, stringContainer in
+                constrain(finger, fretBoard, stringContainer, replace: leftyConstraintGroup(finger)) { finger, fretBoard, stringContainer in
                     finger.bottom == fretBoard.top + (fingerData.position * fretHeight) - 5
                     finger.centerX == stringContainer.centerX
                     finger.width == fingerRadius * 2
