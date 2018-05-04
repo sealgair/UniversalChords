@@ -9,6 +9,44 @@
 import Foundation
 import MusicKit
 
+let kSavedNoteDisplayNameType = "kSavedNoteDisplayNameType"
+let kSavedNoteDisplayAccidental = "kSavedNoteDisplayAccidental"
+
+enum NoteNameType: Int, CustomStringConvertible {
+    case letter = 0
+    case solfège = 1
+    
+    var description: String {
+        switch self {
+        case .letter: return "Letter"
+        case .solfège: return "Solfège"
+        }
+    }
+    
+    static func getCurrent() -> NoteNameType {
+        return NoteNameType(rawValue: UserDefaults.standard.integer(forKey: kSavedNoteDisplayNameType)) ?? .letter
+    }
+    
+    func setCurrent() {
+        UserDefaults.standard.setValue(self.rawValue, forKey: kSavedNoteDisplayNameType)
+    }
+}
+
+extension Accidental {
+    
+    static func getCurrent() -> Accidental {
+        let acc = Accidental(rawValue: UserDefaults.standard.float(forKey: kSavedNoteDisplayAccidental)) ?? .flat
+        if acc == .sharp || acc == .flat {
+            return acc
+        }
+        return .flat
+    }
+    
+    func setCurrent() {
+        UserDefaults.standard.setValue(self.rawValue, forKey: kSavedNoteDisplayAccidental)
+    }
+}
+
 extension Chroma {
     // TODO: would be nice to not have to copy this
     var names: [(LetterName, Accidental)] {
@@ -47,26 +85,38 @@ extension Chroma {
         return accidental == .natural
     }
     
-    public var flatDescription : String {
+    func describe(displayName: NoteNameType, displayAccidental: Accidental) -> String {
         for (letterName, accidental) in self.names {
-            if accidental == .natural || accidental == .flat {
-                return describe(letterName, accidental: accidental)
+            if accidental == .natural || accidental == displayAccidental {
+                return "\(letterName.describe(nameScheme: displayName))\(accidental.description(true))"
             }
         }
         return ""
     }
     
-    public var sharpDescription : String {
-        for (letterName, accidental) in self.names {
-            if accidental == .natural || accidental == .sharp {
-                return describe(letterName, accidental: accidental)
-            }
+    func describeCurrent() -> String {
+        return describe(displayName: NoteNameType.getCurrent(), displayAccidental: Accidental.getCurrent())
+    }
+}
+
+extension LetterName {
+    public var solfège : String {
+        switch self {
+        case .c: return "Do"
+        case .d: return "Re"
+        case .e: return "Mi"
+        case .f: return "Fa"
+        case .g: return "Sol"
+        case .a: return "La"
+        case .b: return "Si"
         }
-        return ""
     }
     
-    func describe(_ letterName: LetterName, accidental: Accidental) -> String {
-        return "\(letterName.description)\(accidental.description(true))"
+    func describe(nameScheme: NoteNameType) -> String {
+        switch nameScheme {
+        case .letter: return description
+        case .solfège: return solfège
+        }
     }
 }
 

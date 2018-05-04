@@ -334,7 +334,7 @@ class ChordDiagramView: UIView, UIScrollViewDelegate {
                 let fingerChroma = fingerData.note
                 let fingerRadius: CGFloat = 20.0
                 let finger = UILabel()
-                finger.text = fingerChroma.flatDescription
+                finger.text = fingerChroma.describeCurrent()
                 finger.backgroundColor = UIColor.black
                 finger.textColor = UIColor.white
                 finger.textAlignment = .center

@@ -10,25 +10,25 @@ import UIKit
 import MusicKit
 import Cartography
 
+let kSavedLefty = "kSavedLefty"
+
 protocol SettingsDelegate {
     func chooseHand()
+    func chooseNoteNameScheme()
 }
 
 class SettingsViewController: UITableViewController {
     
     var delegate: SettingsDelegate?
     
-    let handCell: UITableViewCell = UITableViewCell(frame: .zero)
-    
-    var rows: [UITableViewCell] {
-        return [handCell]
-    }
-    
-    override func viewDidLoad() {
+    lazy var handCell: UITableViewCell = {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "handCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "handCell")!
+        
         let handLabel = UILabel()
         handLabel.text = "Handedness:"
         handLabel.translatesAutoresizingMaskIntoConstraints = false
-        handCell.addSubview(handLabel)
+        cell.contentView.addSubview(handLabel)
         
         let handPicker = UISegmentedControl(items: ["lefty", "righty"])
         handPicker.translatesAutoresizingMaskIntoConstraints = false
@@ -36,15 +36,68 @@ class SettingsViewController: UITableViewController {
         let lefty = UserDefaults.standard.bool(forKey: kSavedLefty)
         handPicker.selectedSegmentIndex = lefty ? 0 : 1
         handPicker.addTarget(self, action: #selector(chooseHand(sender:)), for: .valueChanged)
-        handCell.addSubview(handPicker)
+        cell.contentView.addSubview(handPicker)
         
-        constrain(handCell.contentView, handLabel, handPicker) { cell, handLabel, handPicker in
-            handLabel.leading == cell.leading + 10
+        constrain(cell.contentView, handLabel, handPicker) { cell, handLabel, handPicker in
+            handLabel.leading == cell.leadingMargin
             handPicker.leading == handLabel.trailing + 10
             
             align(centerY: cell, handLabel, handPicker)
             cell.edges == cell.superview!.edges
         }
+        cell.sizeToFit()
+        return cell
+    }()
+    
+    let nameSchemes: [NoteNameType] = [.letter, .solfège]
+    let accidentals: [Accidental] = [.flat, .sharp]
+    lazy var noteNamesCell: UITableViewCell = {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "noteCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell")!
+        
+        let nameLabel = UILabel()
+        nameLabel.text = "Note Names:"
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addSubview(nameLabel)
+        
+        let nameTypePicker = UISegmentedControl(items: nameSchemes.map { n in n.description })
+        let nameScheme = NoteNameType.getCurrent()
+        if let index = nameSchemes.index(of: nameScheme) {
+            nameTypePicker.selectedSegmentIndex = index
+        }
+        nameTypePicker.addTarget(self, action: #selector(chooseNoteNameScheme(sender:)), for: .valueChanged)
+        nameTypePicker.translatesAutoresizingMaskIntoConstraints = false
+        nameTypePicker.tintColor = .black
+        cell.contentView.addSubview(nameTypePicker)
+        
+        let accidentalPicker = UISegmentedControl(items: accidentals.map { a in a.description })
+        accidentalPicker.selectedSegmentIndex = 0
+        let accidental = Accidental.getCurrent()
+        if let index = accidentals.index(of: accidental) {
+            accidentalPicker.selectedSegmentIndex = index
+        }
+        accidentalPicker.addTarget(self, action: #selector(chooseNoteAccidental(sender:)), for: .valueChanged)
+        accidentalPicker.translatesAutoresizingMaskIntoConstraints = false
+        accidentalPicker.tintColor = .black
+        cell.contentView.addSubview(accidentalPicker)
+        
+        constrain(cell.contentView, nameLabel, nameTypePicker, accidentalPicker) { cell, nameLabel, nameTypePicker, accidentalPicker in
+            nameLabel.leading == cell.leadingMargin
+            nameTypePicker.leading == nameLabel.trailing + 10
+            accidentalPicker.leading == nameTypePicker.trailing + 10
+            align(centerY: cell, nameLabel, nameTypePicker, accidentalPicker)
+            cell.edges == cell.superview!.edges
+        }
+        
+        return cell
+    }()
+    
+    var rows: [UITableViewCell] {
+        return [handCell, noteNamesCell]
+    }
+    
+    override func viewDidLoad() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -62,8 +115,18 @@ class SettingsViewController: UITableViewController {
     
     @objc func chooseHand(sender: UISegmentedControl) {
         UserDefaults.standard.set(sender.selectedSegmentIndex == 0, forKey: kSavedLefty)
-        if let delegate = delegate {
-            delegate.chooseHand()
-        }
+        delegate?.chooseHand()
+    }
+    
+    @objc func chooseNoteNameScheme(sender: UISegmentedControl) {
+        let nameScheme = nameSchemes[sender.selectedSegmentIndex]
+        nameScheme.setCurrent()
+        delegate?.chooseNoteNameScheme()
+    }
+    
+    @objc func chooseNoteAccidental(sender: UISegmentedControl) {
+        let accidental = accidentals[sender.selectedSegmentIndex]
+        accidental.setCurrent()
+        delegate?.chooseNoteNameScheme()
     }
 }

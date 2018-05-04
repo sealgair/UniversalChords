@@ -13,7 +13,6 @@ import Cartography
 let kSavedInstrumentName = "kSavedInstrumentName"
 let kSavedChroma = "kSavedChroma"
 let kSavedQuality = "kSavedQuality"
-let kSavedLefty = "kSavedLefty"
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, SettingsDelegate {
     
@@ -23,17 +22,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let instrumentPicker = UIPickerView()
     let settingsButton = UIButton(type: .infoDark)
     let sideConstraintGroup = ConstraintGroup()
+    let noteNameConstraintGroup = ConstraintGroup()
     
     var chromae: [Chroma] {
         return (0...11).map { i in
             Chroma(rawValue: i)!
         }
     }
-    var chromaNames: [String] {
-        return chromae.map { chroma in
-            chroma.flatDescription
-        }
-    }
+    
     lazy var noteButtons: [UIButton] = {
         return chromae.map { chroma in
             UIButton()
@@ -125,7 +121,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.borderWidth = 2
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-            button.setTitle(chroma.flatDescription, for: .normal)
+            button.setTitle(chroma.describeCurrent(), for: .normal)
             button.addTarget(self, action: #selector(chooseChroma(sender:)), for: .touchUpInside)
             if let label = button.titleLabel {
                 label.font = label.font.withSize(label.font.pointSize * 1.25)
@@ -140,11 +136,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
         view.addSubview(notePicker)
         
-        let nbw = noteButtons.map { b in b.titleLabel!.sizeThatFits(UIScreen.main.bounds.size).width }.max()! + 20
         let nbh = noteButtons[0].sizeThatFits(UIScreen.main.bounds.size).height * 1.5
         constrain(noteButtons) { noteButtons in
             let notePicker = noteButtons[0].superview!
-            notePicker.width == nbw
             var prev: ViewProxy?
             for button in noteButtons {
                 if let prev = prev {
@@ -186,6 +180,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         loadState()
         self.chooseInstrument()
         self.chooseHand()
+        self.chooseNoteNameScheme()
         self.chooseChord()
     }
     
@@ -266,9 +261,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let chord = Harmony.create(quality.intervals)
         
         if quality == .Major {
-            chordLabel.text = chroma.flatDescription
+            chordLabel.text = chroma.describeCurrent()
         } else {
-            chordLabel.text = "\(chroma.flatDescription)\(quality.rawValue)"
+            chordLabel.text = "\(chroma.describeCurrent())\(quality.rawValue)"
         }
         chordLabel.resignFirstResponder()
         
@@ -292,6 +287,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @objc func chooseHand() {
         diagram.lefty = lefty
         constrainToSide()
+    }
+    
+    @objc func chooseNoteNameScheme() {
+        for (chroma, button) in zip(chromae, noteButtons) {
+            button.setTitle(chroma.describeCurrent(), for: .normal)
+        }
+        
+        constrain(notePicker, replace: noteNameConstraintGroup) { notePicker in
+            notePicker.width == noteButtons.map { b in b.titleLabel!.sizeThatFits(UIScreen.main.bounds.size).width }.max()! + 20
+        }
+        chooseChord()
+        diagram.updateFingers()
     }
     
     func choices(_ picker:UIPickerView) -> [[String]] {
