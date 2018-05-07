@@ -48,6 +48,9 @@
 		AB40B5E0209FFF16008DE397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AB7F35B020883E7500192BBC /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ABFA05BD209FFF7D00363CA8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		ABFA05BE20A0007A00363CA8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		ABFA05BF20A0007A00363CA8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		ABFA05C020A0007A00363CA8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B529BE83DD04ED85BBB853C2 /* Pods-UniversalChords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniversalChords.release.xcconfig"; path = "Pods/Target Support Files/Pods-UniversalChords/Pods-UniversalChords.release.xcconfig"; sourceTree = "<group>"; };
 		E807DB761AE73F3F002ED8A3 /* Chords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E807DB7A1AE73F3F002ED8A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -240,6 +243,7 @@
 				en,
 				Base,
 				es,
+				fr,
 			);
 			mainGroup = E807DB6D1AE73F3F002ED8A3;
 			productRefGroup = E807DB771AE73F3F002ED8A3 /* Products */;
@@ -356,6 +360,7 @@
 			children = (
 				AB40B5DB209FE3DE008DE397 /* en */,
 				AB40B5DE209FE6BE008DE397 /* es */,
+				ABFA05BF20A0007A00363CA8 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 			children = (
 				AB40B5E0209FFF16008DE397 /* en */,
 				ABFA05BD209FFF7D00363CA8 /* es */,
+				ABFA05C020A0007A00363CA8 /* fr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -375,6 +381,7 @@
 				E807DB801AE73F3F002ED8A3 /* Base */,
 				AB40B5D9209E90BD008DE397 /* en */,
 				AB40B5DD209FE6BE008DE397 /* es */,
+				ABFA05BE20A0007A00363CA8 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
