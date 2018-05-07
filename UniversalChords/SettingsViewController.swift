@@ -26,11 +26,14 @@ class SettingsViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "handCell")!
         
         let handLabel = UILabel()
-        handLabel.text = "Handedness:"
+        handLabel.text = "set-hand-label".i18n(comment: "settings handedness label")
         handLabel.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(handLabel)
         
-        let handPicker = UISegmentedControl(items: ["lefty", "righty"])
+        let handPicker = UISegmentedControl(items: [
+            "set-hand-left".i18n(comment: "settings left handed"),
+            "set-hand-right".i18n(comment: "settings right handed")
+            ])
         handPicker.translatesAutoresizingMaskIntoConstraints = false
         handPicker.tintColor = .black
         let lefty = UserDefaults.standard.bool(forKey: kSavedLefty)
@@ -56,11 +59,13 @@ class SettingsViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell")!
         
         let nameLabel = UILabel()
-        nameLabel.text = "Note Names:"
+        nameLabel.text = "set-note-names-label".i18n(comment: "settings note names label")
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(nameLabel)
         
-        let nameTypePicker = UISegmentedControl(items: nameSchemes.map { n in n.description })
+        let nameTypePicker = UISegmentedControl(items: nameSchemes.map { n in
+            "set-note-\( n.description.lowercased())".i18n(comment: "settings \(n.description) note name scheme")
+        })
         let nameScheme = NoteNameType.getCurrent()
         if let index = nameSchemes.index(of: nameScheme) {
             nameTypePicker.selectedSegmentIndex = index

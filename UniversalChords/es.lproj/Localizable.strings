@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  UniversalChords
+
+  Created by Chase Caster on 5/6/18.
+  Copyright © 2018 chasecaster. All rights reserved.
+*/
+
+// Instrument picker
+"pickBanjo" = "Banjo";
+"pickGuitar" = "Guitarra";
+"pickDropD" = "Drop D";
+"pick7String" = "7 Cordes";
+"pickBass" = "Bajo";
+"pickMando" = "Mandolina";
+"pickUke" = "Ukulele Soprano";
+"pickBariUke" = "Ukulele Barítono";
+
+// Chord Qualities
+"pick-M" = "Mayor";
+"pick-7" = "7";
+"pick-6" = "6";
+"pick-5" = "5";
+"pick-add9" = "Add 9";
+"pick-sus2" = "Sus 2";
+"pick-sus4" = "Sus 4";
+
+"pick-m" = "Menor";
+"pick-m7" = "Men 7";
+"pick-m6" = "Men 6";
+"pick-madd9" = "Men Add 9";
+"pick-+" = "Aug";
+"pick-°" = "Dim";
+
+// Settings
+"settings-title" = "Configuración";
+"menu-close" = "Cerrar";
+
+"set-hand-label" = "Mano";
+"set-hand-left" = "Zurdo";
+"set-hand-right" = "Diestro";
+
+"set-note-names-label" = "Nombres de las Notas";
+"set-note-letter" = "Letra";
+"set-note-solfège" = "Solfeo";

@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  UniversalChords
+
+  Created by Chase Caster on 5/6/18.
+  Copyright © 2018 chasecaster. All rights reserved.
+*/
+
+// Instrument picker
+"pickBanjo" = "Banjo";
+"pickGuitar" = "Guitar";
+"pickDropD" = "Drop D";
+"pick7String" = "7 String";
+"pickBass" = "Bass";
+"pickMando" = "Mandolin";
+"pickUke" = "Soprano Ukulele";
+"pickBariUke" = "Baritone Ukulele";
+
+// Chord Qualities
+"pick-M" = "Major";
+"pick-7" = "7th";
+"pick-6" = "6th";
+"pick-5" = "5th";
+"pick-add9" = "Add 9";
+"pick-sus2" = "Sus 2";
+"pick-sus4" = "Sus 4";
+
+"pick-m" = "Minor";
+"pick-m7" = "Min 7th";
+"pick-m6" = "Min 6th";
+"pick-madd9" = "Min Add 9";
+"pick-+" = "Aug";
+"pick-°" = "Dim";
+
+// Settings
+"settings-title" = "Settings";
+"menu-close" = "Close";
+
+"set-hand-label" = "Handedness:";
+"set-hand-left" = "Lefty";
+"set-hand-right" = "Righty";
+
+"set-note-names-label" = "Note Names:";
+"set-note-letter" = "Letter";
+"set-note-solfège" = "Solfège";

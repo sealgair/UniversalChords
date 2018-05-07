@@ -20,7 +20,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     let diagram = ChordDiagramView()
     let instrumentLabel = UITextField()
     let instrumentPicker = UIPickerView()
-    let settingsButton = UIButton(type: .infoDark)
+    let settingsButton = UIButton()
     let sideConstraintGroup = ConstraintGroup()
     let noteNameConstraintGroup = ConstraintGroup()
     
@@ -70,12 +70,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var chord: PitchSet!
     
     let instruments = [
-        Instrument(name:"Banjo", strings:[.d, .g, .b, .d]),
-        Instrument(name:"Guitar", strings:[.e, .a, .d, .g, .b, .e]),
-        Instrument(name:"Drop D Guitar", strings:[.d, .a, .d, .g, .b, .e]),
-        Instrument(name:"Mandolin", strings:[.g, .d, .a, .e]),
-        Instrument(name:"Soprano Ukulele", strings:[.g, .c, .e, .a]),
-        Instrument(name:"Baritone Ukulele", strings:[.d, .g, .b, .e]),
+        Instrument(name:"pickBanjo".i18n(comment:"pick banjo"), strings:[.d, .g, .b, .d]),
+        Instrument(name:"pickGuitar".i18n(comment:"pick guitar"), strings:[.e, .a, .d, .g, .b, .e]),
+        Instrument(name:"pickDropD".i18n(comment:"pick drop d guitar"), strings:[.d, .a, .d, .g, .b, .e]),
+        Instrument(name:"pick7String".i18n(comment:"pick 7 string guitar"), strings:[.b, .e, .a, .d, .g, .b, .e]),
+        Instrument(name:"pickBass".i18n(comment:"pick bass guitar"), strings:[.e, .a, .d, .g]),
+        Instrument(name:"pickMando".i18n(comment:"pick mandolin"), strings:[.g, .d, .a, .e]),
+        Instrument(name:"pickUke".i18n(comment:"pick soprano ukulele"), strings:[.g, .c, .e, .a]),
+        Instrument(name:"pickBariUke".i18n(comment:"pick baritone ukulele"), strings:[.d, .g, .b, .e]),
     ]
     var instrument: Instrument!
     
@@ -88,7 +90,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         for qualityPicker in qualityPickers {
             let qualities = qualityMap[qualityPicker]!
             for (i, quality) in qualities.enumerated() {
-                qualityPicker.insertSegment(withTitle: quality.name , at: i, animated: false)
+                qualityPicker.insertSegment(withTitle: "pick-\(quality.rawValue)".i18n(comment: "Pick Quality \(quality.rawValue)"), at: i, animated: false)
             }
             qualityPicker.selectedSegmentIndex = 0
             qualityPicker.translatesAutoresizingMaskIntoConstraints = false
@@ -167,7 +169,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         diagram.translatesAutoresizingMaskIntoConstraints = false
         
         settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.setTitle("⚙", for: .normal)
         settingsButton.tintColor = .black
+        settingsButton.sizeToFit()
         settingsButton.addTarget(self, action: #selector(openSettings), for: .touchUpInside)
         view.addSubview(settingsButton)
 
@@ -312,8 +316,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     @objc func openSettings() {
         let settingsVC = SettingsViewController(style: .grouped)
-        settingsVC.title = "Settings"
-        settingsVC.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(closeSettings))
+        settingsVC.title = "settings-title".i18n(comment: "title of settings view")
+        settingsVC.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "menu-close".i18n(comment: "close menu button title"),
+                                                                       style: .done, target: self, action: #selector(closeSettings))
         settingsVC.delegate = self
         
         let settingsNav = UINavigationController(rootViewController: settingsVC)

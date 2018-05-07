@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		6CB216B99E48623934BB9764 /* Pods_UniversalChords.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5B1DF735692358B5ED42E5 /* Pods_UniversalChords.framework */; };
 		AB2741C72096383F00424E8B /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2741C62096383F00424E8B /* ImageExtensions.swift */; };
+		AB40B5D7209E8E94008DE397 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB40B5D6209E8E94008DE397 /* StringExtensions.swift */; };
+		AB40B5DC209FE3DE008DE397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AB40B5DA209FE3DE008DE397 /* Localizable.strings */; };
+		AB40B5E1209FFF16008DE397 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AB40B5DF209FFF16008DE397 /* InfoPlist.strings */; };
 		AB7F35B120883E7500192BBC /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7F35B020883E7500192BBC /* SettingsViewController.swift */; };
 		E807DB7C1AE73F3F002ED8A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DB7B1AE73F3F002ED8A3 /* AppDelegate.swift */; };
 		E807DB7E1AE73F3F002ED8A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DB7D1AE73F3F002ED8A3 /* ViewController.swift */; };
@@ -37,7 +40,14 @@
 		8B5B1DF735692358B5ED42E5 /* Pods_UniversalChords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UniversalChords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		95153A60EB93911961A02EB2 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB2741C62096383F00424E8B /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
+		AB40B5D6209E8E94008DE397 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		AB40B5D9209E90BD008DE397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		AB40B5DB209FE3DE008DE397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AB40B5DD209FE6BE008DE397 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		AB40B5DE209FE6BE008DE397 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AB40B5E0209FFF16008DE397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AB7F35B020883E7500192BBC /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		ABFA05BD209FFF7D00363CA8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B529BE83DD04ED85BBB853C2 /* Pods-UniversalChords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniversalChords.release.xcconfig"; path = "Pods/Target Support Files/Pods-UniversalChords/Pods-UniversalChords.release.xcconfig"; sourceTree = "<group>"; };
 		E807DB761AE73F3F002ED8A3 /* Chords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E807DB7A1AE73F3F002ED8A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,7 +136,10 @@
 				E807DB791AE73F3F002ED8A3 /* Supporting Files */,
 				E8A3BE771B8EE32E0047B3B3 /* ObjectWrapper.swift */,
 				E8C60F7C1D1CBED600F0DB40 /* MusicExtensions.swift */,
+				AB40B5D6209E8E94008DE397 /* StringExtensions.swift */,
 				AB2741C62096383F00424E8B /* ImageExtensions.swift */,
+				AB40B5DA209FE3DE008DE397 /* Localizable.strings */,
+				AB40B5DF209FFF16008DE397 /* InfoPlist.strings */,
 			);
 			path = UniversalChords;
 			sourceTree = "<group>";
@@ -226,6 +239,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = E807DB6D1AE73F3F002ED8A3;
 			productRefGroup = E807DB771AE73F3F002ED8A3 /* Products */;
@@ -244,6 +258,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E807DB811AE73F3F002ED8A3 /* Main.storyboard in Resources */,
+				AB40B5E1209FFF16008DE397 /* InfoPlist.strings in Resources */,
+				AB40B5DC209FE3DE008DE397 /* Localizable.strings in Resources */,
 				E807DB831AE73F3F002ED8A3 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +321,7 @@
 			files = (
 				E83863B81B07E3800027C77F /* Instrument.swift in Sources */,
 				E83863B61B07E30C0027C77F /* ChordDiagramView.swift in Sources */,
+				AB40B5D7209E8E94008DE397 /* StringExtensions.swift in Sources */,
 				E8C60F7D1D1CBED600F0DB40 /* MusicExtensions.swift in Sources */,
 				E807DB7E1AE73F3F002ED8A3 /* ViewController.swift in Sources */,
 				E807DB7C1AE73F3F002ED8A3 /* AppDelegate.swift in Sources */,
@@ -334,10 +351,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		AB40B5DA209FE3DE008DE397 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB40B5DB209FE3DE008DE397 /* en */,
+				AB40B5DE209FE6BE008DE397 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		AB40B5DF209FFF16008DE397 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AB40B5E0209FFF16008DE397 /* en */,
+				ABFA05BD209FFF7D00363CA8 /* es */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		E807DB7F1AE73F3F002ED8A3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E807DB801AE73F3F002ED8A3 /* Base */,
+				AB40B5D9209E90BD008DE397 /* en */,
+				AB40B5DD209FE6BE008DE397 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -349,6 +386,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -406,6 +444,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
